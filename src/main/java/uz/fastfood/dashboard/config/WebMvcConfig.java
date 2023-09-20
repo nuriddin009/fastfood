@@ -1,4 +1,4 @@
-package uz.buxorooquv.dashboard.config;
+package uz.fastfood.dashboard.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Configuration;

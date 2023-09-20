@@ -1,4 +1,4 @@
-package uz.buxorooquv.dashboard.config;
+package uz.fastfood.dashboard.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,26 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Collections;
-
-import static uz.buxorooquv.dashboard.entity.enums.Permission.ADMIN_CREATE;
-import static uz.buxorooquv.dashboard.entity.enums.Permission.ADMIN_DELETE;
-import static uz.buxorooquv.dashboard.entity.enums.Permission.ADMIN_READ;
-import static uz.buxorooquv.dashboard.entity.enums.Permission.ADMIN_UPDATE;
-import static uz.buxorooquv.dashboard.entity.enums.Permission.MANAGER_CREATE;
-import static uz.buxorooquv.dashboard.entity.enums.Permission.MANAGER_DELETE;
-import static uz.buxorooquv.dashboard.entity.enums.Permission.MANAGER_READ;
-import static uz.buxorooquv.dashboard.entity.enums.Permission.MANAGER_UPDATE;
-import static uz.buxorooquv.dashboard.entity.enums.Role.ADMIN;
-import static uz.buxorooquv.dashboard.entity.enums.Role.MANAGER;
-import static org.springframework.http.HttpMethod.DELETE;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
+import uz.fastfood.dashboard.security.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -47,11 +28,9 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.disable())
+                .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests()
-                .requestMatchers(
-                        "/**",
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/**",
                         "/favicon.ico",
                         "/**/*.png",
                         "/**/*.gif",
@@ -65,23 +44,15 @@ public class SecurityConfiguration {
                         "/swagger-resources/**",
                         "/v2/**",
                         "/csrf",
-                        "/webjars/**"
-                )
-                .permitAll()
-
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                        "/webjars/**").permitAll().anyRequest().authenticated())
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout()
-                .logoutUrl("/api/v1/auth/logout")
-                .addLogoutHandler(logoutHandler)
-                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-        ;
+                .logout(logoutConfigurer -> logoutConfigurer
+                        .logoutUrl("/api/v1/auth/logout")
+                        .addLogoutHandler(logoutHandler)
+                        .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+                );
         return http.build();
     }
 

@@ -1,10 +1,11 @@
-package uz.buxorooquv.dashboard.auth;
+package uz.fastfood.dashboard.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uz.buxorooquv.dashboard.entity.enums.RoleName;
+import uz.fastfood.dashboard.entity.enums.RoleName;
+
 
 @Data
 @Builder
@@ -14,7 +15,6 @@ public class RegisterRequest {
 
   private String firstname;
   private String lastname;
-  private String email;
+  private String username;
   private String password;
-  private RoleName role;
 }

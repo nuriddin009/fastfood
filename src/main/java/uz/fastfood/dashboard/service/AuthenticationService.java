@@ -1,16 +1,5 @@
-package uz.buxorooquv.dashboard.auth;
+package uz.fastfood.dashboard.service;
 
-import uz.buxorooquv.dashboard.config.JwtService;
-import uz.buxorooquv.dashboard.dto.BaseResponse;
-import uz.buxorooquv.dashboard.dto.ChangePasswordRequest;
-import uz.buxorooquv.dashboard.entity.Certificate;
-import uz.buxorooquv.dashboard.entity.Role;
-import uz.buxorooquv.dashboard.entity.Token;
-import uz.buxorooquv.dashboard.repository.RoleRepository;
-import uz.buxorooquv.dashboard.repository.TokenRepository;
-import uz.buxorooquv.dashboard.entity.enums.TokenType;
-import uz.buxorooquv.dashboard.entity.User;
-import uz.buxorooquv.dashboard.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +9,19 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import uz.buxorooquv.dashboard.service.UserSession;
+import uz.fastfood.dashboard.dto.request.AuthenticationRequest;
+import uz.fastfood.dashboard.dto.request.RegisterRequest;
+import uz.fastfood.dashboard.dto.response.AuthenticationResponse;
+import uz.fastfood.dashboard.entity.Role;
+import uz.fastfood.dashboard.entity.Token;
+import uz.fastfood.dashboard.entity.User;
+import uz.fastfood.dashboard.entity.enums.RoleName;
+import uz.fastfood.dashboard.entity.enums.TokenType;
+import uz.fastfood.dashboard.repository.RoleRepository;
+import uz.fastfood.dashboard.repository.TokenRepository;
+import uz.fastfood.dashboard.repository.UserRepository;
+import uz.fastfood.dashboard.security.JwtService;
+
 
 import java.io.IOException;
 import java.util.Optional;
@@ -39,11 +40,12 @@ public class AuthenticationService {
     private final UserRepository userRepository;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        Role role = roleRepository.save(Role.builder().name(request.getRole()).build());
+        Role role = roleRepository.save(Role.builder().name(RoleName.ROLE_USER).build());
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
-                .email(request.getEmail())
+                .username(request.getUsername())
+                .phoneNumber("+998991234567")
                 .password(passwordEncoder.encode(request.getPassword()))
                 .roles(Set.of(role))
                 .build();
@@ -57,14 +59,18 @@ public class AuthenticationService {
                 .build();
     }
 
+
+
+
+
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
+                        request.getUsername(),
                         request.getPassword()
                 )
         );
-        var user = repository.findByEmail(request.getEmail())
+        var user = repository.findByUsername(request.getUsername())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
@@ -111,7 +117,7 @@ public class AuthenticationService {
         refreshToken = authHeader.substring(7);
         userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail != null) {
-            var user = this.repository.findByEmail(userEmail)
+            var user = this.repository.findByUsername(userEmail)
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
@@ -127,7 +133,7 @@ public class AuthenticationService {
     }
 
     public String isValidAdminToken(String token) {
-        Optional<User> byEmail = repository.findByEmail(jwtService.extractUsername(token));
+        Optional<User> byEmail = repository.findByUsername(jwtService.extractUsername(token));
         if (byEmail.isPresent()) {
             boolean tokenValid = jwtService.isTokenValid(token, byEmail.get());
             return tokenValid ? "ADMIN" : "UnAuthorized";
@@ -136,32 +142,32 @@ public class AuthenticationService {
         }
     }
 
-    public BaseResponse<Certificate> changePassword(ChangePasswordRequest request, BaseResponse<Certificate> response, HttpServletRequest servletRequest) {
-
-        try {
-
-
-
-            String email = jwtService.extractUsername(servletRequest.getHeader("Authorization"));
-
-            User user = userRepository.findByEmail(email).get();
-
-            if (passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
-                user.setEmail(request.getEmail());
-                user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-                repository.save(user);
-                response.setMessage("Credential changed");
-            } else {
-                response.setMessage("Password not matched");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.setError(true);
-            response.setMessage(e.getMessage());
-        }
-
-        return response;
-    }
+//    public BaseResponse<Certificate> changePassword(ChangePasswordRequest request, BaseResponse<Certificate> response, HttpServletRequest servletRequest) {
+//
+//        try {
+//
+//
+//
+//            String email = jwtService.extractUsername(servletRequest.getHeader("Authorization"));
+//
+//            User user = userRepository.findByEmail(email).get();
+//
+//            if (passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+//                user.setEmail(request.getEmail());
+//                user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+//                repository.save(user);
+//                response.setMessage("Credential changed");
+//            } else {
+//                response.setMessage("Password not matched");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            response.setError(true);
+//            response.setMessage(e.getMessage());
+//        }
+//
+//        return response;
+//    }
 
     public String extractToken(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");

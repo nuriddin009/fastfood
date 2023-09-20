@@ -1,4 +1,4 @@
-package uz.buxorooquv.dashboard.auth;
+package uz.fastfood.dashboard.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthenticationRequest {
 
-    private String email;
+    private String username;
     private String password;
 }

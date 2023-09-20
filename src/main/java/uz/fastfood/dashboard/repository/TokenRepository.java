@@ -1,12 +1,13 @@
-package uz.buxorooquv.dashboard.repository;
+package uz.fastfood.dashboard.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import uz.fastfood.dashboard.entity.Token;
+
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import uz.buxorooquv.dashboard.entity.Token;
 
 public interface TokenRepository extends JpaRepository<Token, Integer> {
 

@@ -1,19 +1,14 @@
-package uz.buxorooquv.dashboard.controller;
+package uz.fastfood.dashboard.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
-import uz.buxorooquv.dashboard.auth.AuthenticationRequest;
-import uz.buxorooquv.dashboard.auth.AuthenticationResponse;
-import uz.buxorooquv.dashboard.auth.AuthenticationService;
-import uz.buxorooquv.dashboard.auth.RegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import uz.buxorooquv.dashboard.dto.BaseResponse;
-import uz.buxorooquv.dashboard.dto.ChangePasswordRequest;
-import uz.buxorooquv.dashboard.entity.Certificate;
+import org.springframework.web.bind.annotation.*;
+import uz.fastfood.dashboard.dto.request.AuthenticationRequest;
+import uz.fastfood.dashboard.dto.request.RegisterRequest;
+import uz.fastfood.dashboard.dto.response.AuthenticationResponse;
+import uz.fastfood.dashboard.service.AuthenticationService;
 
 import java.io.IOException;
 
@@ -51,16 +46,6 @@ public class AuthenticationController {
         service.refreshToken(request, response);
     }
 
-    @Secured(value = "ROLE_ADMIN")
-    @PostMapping("/change_password")
-    public ResponseEntity<BaseResponse<?>> changePassword(
-            @RequestBody ChangePasswordRequest request,
-            HttpServletRequest servletRequest
-    ) {
-        BaseResponse<Certificate> response = new BaseResponse<>();
-        response = service.changePassword(request, response,servletRequest);
-        HttpStatus status = response.getError() ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.OK;
-        return new ResponseEntity<>(response, status);
-    }
+
 
 }
