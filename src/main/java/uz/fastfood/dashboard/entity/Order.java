@@ -5,6 +5,8 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 import uz.fastfood.dashboard.entity.template.BaseEntity;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Builder
@@ -13,14 +15,23 @@ import uz.fastfood.dashboard.entity.template.BaseEntity;
 @Entity(name = "orders")
 public class Order extends BaseEntity {
 
+    private BigDecimal orderNumber;
 
+    private BigDecimal totalPrice;
 
     @ManyToOne
     private User customer;
 
+    @ManyToOne
+    private User courier;
 
     @ManyToOne
     private User operator;
 
+    @ManyToOne
+    private Branch branch;
+
+    private Double longitude;
+    private Double latitude;
 
 }

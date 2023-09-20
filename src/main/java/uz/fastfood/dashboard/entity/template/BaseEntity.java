@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import uz.fastfood.dashboard.entity.audit.UserAudit;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class BaseEntity {
+public abstract class BaseEntity extends UserAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
