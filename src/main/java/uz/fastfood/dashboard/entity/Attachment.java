@@ -20,10 +20,4 @@ public class Attachment extends BaseEntity {
 
     private String filePath;
 
-    @ManyToOne
-    private Category category;
-
-    private BigDecimal price;
-    @Column(columnDefinition = "text")
-    private String description;
 }
