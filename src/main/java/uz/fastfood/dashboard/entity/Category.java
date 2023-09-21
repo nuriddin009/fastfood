@@ -24,4 +24,6 @@ public class Category extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Category parentCategory;
 
+    private boolean deleted = false;
+
 }

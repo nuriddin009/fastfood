@@ -90,9 +90,9 @@ public class DataLoader implements CommandLineRunner {
             ));
 
             List<Attachment> attachments = attachmentRepository.saveAll(List.of(
-                    new Attachment("https://www.pasta.uz/upload/products/OL%20x%20Pasta%20Tandir%20lavash.jpg"),
-                    new Attachment("https://bakeitwithlove.com/wp-content/uploads/2021/05/McDonalds-The-Travis-Scott-Burger-sq.jpg"),
-                    new Attachment("https://images.uzum.uz/cf7p3f2vtie1lhbhc7ig/original.jpg")
+                    new Attachment("https://www.pasta.uz/upload/products/OL%20x%20Pasta%20Tandir%20lavash.jpg", false),
+                    new Attachment("https://bakeitwithlove.com/wp-content/uploads/2021/05/McDonalds-The-Travis-Scott-Burger-sq.jpg", false),
+                    new Attachment("https://images.uzum.uz/cf7p3f2vtie1lhbhc7ig/original.jpg", false)
             ));
 
 

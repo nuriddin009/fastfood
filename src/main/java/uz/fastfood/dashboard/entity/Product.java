@@ -34,4 +34,6 @@ public class Product extends BaseEntity {
     @ManyToOne
     private Category category;
 
+    private boolean deleted = false;
+
 }

@@ -34,9 +34,10 @@ public class ProductController {
             @RequestParam(defaultValue = "asc") String priceSort,
             @RequestParam(defaultValue = "asc") String nameSort,
             @RequestParam(defaultValue = "", required = false) UUID categorySort,
-            @RequestParam(defaultValue = "1") Integer page
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "") String search
     ) {
-        return ResponseEntity.ok(productService.getProducts(priceSort, nameSort, categorySort, page));
+        return ResponseEntity.ok(productService.getProducts(priceSort, nameSort, categorySort, page, search));
     }
 
 

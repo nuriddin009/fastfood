@@ -34,4 +34,6 @@ public class Order extends BaseEntity {
     private Double longitude;
     private Double latitude;
 
+    private boolean deleted = false;
+
 }

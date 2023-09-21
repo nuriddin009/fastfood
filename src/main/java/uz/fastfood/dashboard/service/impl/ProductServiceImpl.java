@@ -28,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
     private final EntityManager entityManager;
 
     @Override
-    public ApiResponse getProducts(String priceSort, String nameSort, UUID categorySort, Integer page) {
+    public ApiResponse getProducts(String priceSort, String nameSort, UUID categorySort, Integer page, String search) {
 
         List<Sort.Order> sorts = new ArrayList<>();
 
@@ -57,6 +57,11 @@ public class ProductServiceImpl implements ProductService {
         }
         orderQuery.deleteCharAt(orderQuery.length() - 1);
 
+
+        StringBuilder conQuery = new StringBuilder(" where ");
+        if (categorySort != null) conQuery.append("t.category.id = :categorySort");
+        conQuery.append(" upper(t.name) like upper('%").append(search).append("%') ");
+
         String query = "select t.id as id, " +
                 "t.name as name, " +
                 "t.price as price, " +
@@ -64,9 +69,11 @@ public class ProductServiceImpl implements ProductService {
                 "t.category.nameUz as categoryName, " +
                 "t.category.id as categoryId, " +
                 "t.description as description " +
-                "from Product t" + orderQuery;
+                "from Product t" + conQuery + orderQuery;
+
 
         Query productResult = entityManager.createQuery(query);
+        if (categorySort != null) productResult.setParameter("categorySort", categorySort);
         productResult.setFirstResult(page * 10);
         productResult.setMaxResults(10);
 
@@ -92,6 +99,8 @@ public class ProductServiceImpl implements ProductService {
                         new CategoryResponse(UUID.fromString(objects[5].toString()), objects[4].toString()),
                         objects[6].toString()
                 )).collect(Collectors.toList());
+
+
 
 
         Query totalAreaQuery = entityManager.createQuery("select count(t.id) from Product t ");

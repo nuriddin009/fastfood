@@ -20,5 +20,7 @@ public class OrderItem extends BaseEntity {
 
     private int productCount;
 
+    private boolean deleted = false;
+
 
 }
