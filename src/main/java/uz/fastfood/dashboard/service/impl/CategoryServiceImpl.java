@@ -21,6 +21,16 @@ public class CategoryServiceImpl implements CategoryService {
     public BaseResponse<?> createCategory(CategoryRequest request, BaseResponse<?> response) {
 
 
+        try {
+
+
+
+
+        }catch (Exception e){
+            response.setError(true);
+            response.setMessage(e.getMessage());
+        }
+
         return response;
     }
 
