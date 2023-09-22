@@ -1,8 +1,7 @@
 package uz.fastfood.dashboard.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import uz.fastfood.dashboard.entity.template.BaseEntity;
 
 import java.util.HashSet;
@@ -12,6 +11,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Category extends BaseEntity {
 
     @Column(name = "name_uz", nullable = false)

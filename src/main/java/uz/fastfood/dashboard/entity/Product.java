@@ -1,8 +1,7 @@
 package uz.fastfood.dashboard.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import uz.fastfood.dashboard.entity.template.BaseEntity;
 
 import java.math.BigDecimal;
@@ -11,6 +10,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity(name = "product")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Product extends BaseEntity {
 
     @Column(name = "name", nullable = false)
