@@ -1,6 +1,9 @@
 package uz.fastfood.dashboard.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 import uz.fastfood.dashboard.entity.template.BaseEntity;
 
@@ -10,20 +13,18 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 public class Category extends BaseEntity {
 
-
-    @Column(nullable = false)
+    @Column(name = "name_uz", nullable = false)
     private String nameUz;
-    @Column(nullable = false)
+
+    @Column(name = "name_ru", nullable = false)
     private String nameRu;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Category parentCategory;
     @Column(name = "parent_id")
     private UUID parentId;
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
@@ -36,6 +37,9 @@ public class Category extends BaseEntity {
     @OneToMany(mappedBy = "category")
     private Set<Product> products = new HashSet<>();
 
-    
+    @OneToMany(mappedBy = "category")
+    private Set<Product> products = new HashSet<>();
+
+
 
 }

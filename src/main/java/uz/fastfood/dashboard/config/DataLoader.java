@@ -13,13 +13,13 @@ import uz.fastfood.dashboard.repository.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static uz.fastfood.dashboard.entity.Branch.*;
+
 
 @Component
 @RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner {
 
-    private final UserRepository userRepository;
-    private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final BranchRepository branchRepository;
     private final CategoryRepository categoryRepository;
@@ -27,13 +27,13 @@ public class DataLoader implements CommandLineRunner {
 
     @Transactional
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
 
         if (branchRepository.count() == 0) {
             List<Branch> branches = branchRepository.saveAll(
                     List.of(
-                            Branch.builder()
+                            builder()
                                     .landmark("Metro ro’parasida")
                                     .nameUz("Maksim Gorgiy")
                                     .nameRu("Maksim Gorgiy")
@@ -41,7 +41,7 @@ public class DataLoader implements CommandLineRunner {
                                     .longitude(-77.0364)
                                     .workingTime("09:00 - 20:00")
                                     .build(),
-                            Branch.builder()
+                            builder()
                                     .landmark("Royson dom oldida")
                                     .nameUz("Xadra fast food")
                                     .nameRu("Xadra fast food")
@@ -49,7 +49,7 @@ public class DataLoader implements CommandLineRunner {
                                     .longitude(-77.0364)
                                     .workingTime("09:00 - 20:00")
                                     .build(),
-                            Branch.builder()
+                            builder()
                                     .landmark("Metro ro’parasida")
                                     .nameUz("Shaxrishton")
                                     .nameRu("Shaxrishton")
@@ -80,12 +80,12 @@ public class DataLoader implements CommandLineRunner {
 
             List<Category> drinksCategory = categoryRepository.saveAll(List.of(
                     Category.builder()
-                            .parentCategory(drinks)
+                            .parent(drinks)
                             .nameUz("Issiq ichimliklar uz")
                             .nameRu("Issiq ichimliklar ru")
                             .build(),
                     Category.builder()
-                            .parentCategory(drinks)
+                            .parent(drinks)
                             .nameUz("Salqin ichimliklar uz")
                             .nameRu("Salqin ichimliklar ru")
                             .build()
