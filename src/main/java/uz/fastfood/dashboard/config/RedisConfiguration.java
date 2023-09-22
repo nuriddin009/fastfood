@@ -10,11 +10,7 @@ import uz.fastfood.dashboard.entity.Product;
 @Configuration
 @EnableCaching
 public class RedisConfiguration {
-    private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
-
-    public RedisConfiguration(javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
-        this.jcacheConfiguration = jcacheConfiguration;
-    }
+    private javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
