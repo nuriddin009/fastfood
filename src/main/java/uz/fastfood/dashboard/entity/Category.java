@@ -2,6 +2,8 @@ package uz.fastfood.dashboard.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.DynamicUpdate;
 import uz.fastfood.dashboard.entity.template.BaseEntity;
 
 import java.util.HashSet;
@@ -14,6 +16,8 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@DynamicUpdate
 public class Category extends BaseEntity {
 
     @Column(name = "name_uz", nullable = false)
@@ -33,9 +37,5 @@ public class Category extends BaseEntity {
 
     @OneToMany(mappedBy = "category")
     private Set<Product> products = new HashSet<>();
-
-
-
-
 
 }

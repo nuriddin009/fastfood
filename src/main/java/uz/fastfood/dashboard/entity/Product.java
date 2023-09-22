@@ -2,6 +2,8 @@ package uz.fastfood.dashboard.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.DynamicUpdate;
 import uz.fastfood.dashboard.entity.template.BaseEntity;
 
 import java.math.BigDecimal;
@@ -13,6 +15,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity(name="product")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@DynamicUpdate
 public class Product extends BaseEntity {
 
     @Column(name = "name", nullable = false)
