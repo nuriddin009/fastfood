@@ -1,5 +1,6 @@
 package uz.fastfood.dashboard.config;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,7 @@ public class DataLoader implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final AttachmentRepository attachmentRepository;
 
+    @Transactional
     @Override
     public void run(String... args) throws Exception {
 
