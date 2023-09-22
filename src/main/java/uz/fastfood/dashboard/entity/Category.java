@@ -1,8 +1,7 @@
 package uz.fastfood.dashboard.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import uz.fastfood.dashboard.entity.template.BaseEntity;
 
 import java.util.HashSet;
@@ -37,6 +36,6 @@ public class Category extends BaseEntity {
     @OneToMany(mappedBy = "category")
     private Set<Product> products = new HashSet<>();
 
-    private boolean deleted = false;
+    
 
 }

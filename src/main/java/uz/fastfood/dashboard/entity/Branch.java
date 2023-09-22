@@ -21,6 +21,6 @@ public class Branch extends BaseEntity {
     private Double longitude;
     private Double latitude;
 
-    private boolean deleted = false;
+    
 
 }

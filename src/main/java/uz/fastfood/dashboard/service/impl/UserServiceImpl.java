@@ -18,6 +18,10 @@ public class UserServiceImpl implements UserService {
     public User registerClient(ClientRequest request) {
 
 
+        User build = User.builder()
+                .phoneNumber(request.getPhoneNumber())
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname()).build();
 
 
         return null;

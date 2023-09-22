@@ -42,6 +42,6 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "category_id", updatable = false, insertable = false)
     private Category category;
 
-    private boolean deleted = false;
+    
 
 }

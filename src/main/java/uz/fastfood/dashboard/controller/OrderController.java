@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.fastfood.dashboard.dto.request.OrderRequest;
 import uz.fastfood.dashboard.dto.response.BaseResponse;
 import uz.fastfood.dashboard.service.OrderService;
@@ -17,6 +14,8 @@ import uz.fastfood.dashboard.service.OrderService;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/order")
 public class OrderController {
+
+    private static final String URL = "/findAll";
 
 
     private final OrderService service;
@@ -28,5 +27,11 @@ public class OrderController {
         response = service.makeOrder(request, response);
         HttpStatus status = response.getError() ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.ACCEPTED;
         return new ResponseEntity<>(response, status);
+    }
+
+
+    @GetMapping(URL)
+    public String getAll(){
+        return URL;
     }
 }

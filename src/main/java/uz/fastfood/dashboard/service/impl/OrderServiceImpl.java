@@ -7,6 +7,7 @@ import uz.fastfood.dashboard.dto.request.OrderRequest;
 import uz.fastfood.dashboard.dto.response.BaseResponse;
 import uz.fastfood.dashboard.entity.Order;
 import uz.fastfood.dashboard.entity.Product;
+import uz.fastfood.dashboard.entity.enums.OrderStatus;
 import uz.fastfood.dashboard.repository.OrderRepository;
 import uz.fastfood.dashboard.repository.ProductRepository;
 import uz.fastfood.dashboard.service.OrderService;
@@ -45,10 +46,10 @@ public class OrderServiceImpl implements OrderService {
                     .customer(userSession.getUser())
                     .operator(null)
                     .totalPrice(sum)
+                    .orderStatus(OrderStatus.PENDING)
                     .build());
 
             response.setMessage("Order created");
-
 
         } catch (Exception e) {
             response.setError(true);

@@ -15,6 +15,6 @@ import uz.fastfood.dashboard.entity.template.BaseEntity;
 public class Attachment extends BaseEntity {
 
     private String filePath;
-    private boolean deleted = false;
+    
 
 }

@@ -24,4 +24,6 @@ public abstract class BaseEntity extends UserAudit {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    private boolean deleted = false;
 }
