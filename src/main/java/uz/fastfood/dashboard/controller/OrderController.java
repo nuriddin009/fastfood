@@ -8,7 +8,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.fastfood.dashboard.dto.request.OrderRequest;
 import uz.fastfood.dashboard.dto.response.BaseResponse;
+import uz.fastfood.dashboard.entity.enums.OrderStatus;
 import uz.fastfood.dashboard.service.OrderService;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,9 +32,24 @@ public class OrderController {
         return new ResponseEntity<>(response, status);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+    @PatchMapping(value = "update")
+    public ResponseEntity<BaseResponse<?>> changeStatus(
+            @RequestParam(name = "orderId") UUID orderId,
+            @RequestParam(name = "orderStatus") OrderStatus orderStatus
+    ) {
+        BaseResponse<?> response = new BaseResponse<>();
+        response = service.changeStatusOrder(orderId, orderStatus, response);
+        HttpStatus status = response.getError() ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.OK;
+        return new ResponseEntity<>(response, status);
+    }
+
+
+
 
     @GetMapping(URL)
-    public String getAll(){
+    public String getAll() {
+
         return URL;
     }
 }

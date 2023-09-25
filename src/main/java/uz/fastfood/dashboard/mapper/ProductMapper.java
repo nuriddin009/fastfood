@@ -1,4 +1,4 @@
-package uz.fastfood.dashboard.service;
+package uz.fastfood.dashboard.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

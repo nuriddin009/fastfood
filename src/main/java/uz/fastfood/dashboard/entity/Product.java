@@ -11,10 +11,10 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Entity(name="product")
+@Entity(name = "product")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @DynamicUpdate
 public class Product extends BaseEntity {
@@ -40,6 +40,5 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "category_id", updatable = false, insertable = false)
     private Category category;
 
-    private boolean deleted = false;
 
 }

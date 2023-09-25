@@ -3,15 +3,15 @@ package uz.fastfood.dashboard.config;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import uz.fastfood.dashboard.entity.Attachment;
-import uz.fastfood.dashboard.entity.Branch;
-import uz.fastfood.dashboard.entity.Category;
-import uz.fastfood.dashboard.entity.Product;
+import uz.fastfood.dashboard.entity.*;
+import uz.fastfood.dashboard.entity.enums.RoleName;
 import uz.fastfood.dashboard.repository.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import static uz.fastfood.dashboard.entity.Branch.*;
 
@@ -24,10 +24,28 @@ public class DataLoader implements CommandLineRunner {
     private final BranchRepository branchRepository;
     private final CategoryRepository categoryRepository;
     private final AttachmentRepository attachmentRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Transactional
     @Override
     public void run(String... args) {
+
+        if (userRepository.count() == 0) {
+
+            Role role_user = roleRepository.save(Role.builder().name(RoleName.ROLE_USER).build());
+            Role role_admin = roleRepository.save(Role.builder().name(RoleName.ROLE_ADMIN).build());
+            Role role_super_admin = roleRepository.save(Role.builder().name(RoleName.ROLE_SUPER_ADMIN).build());
+            userRepository.save(User.builder()
+                    .username("admin")
+                    .phoneNumber("+998991234567")
+                    .password(passwordEncoder.encode("password"))
+                    .firstname("Adminjon")
+                    .lastname("Adminjonov")
+                    .roles(Set.of(role_user, role_admin, role_super_admin))
+                    .build());
+        }
 
 
         if (branchRepository.count() == 0) {

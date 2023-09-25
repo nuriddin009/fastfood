@@ -7,6 +7,7 @@ import uz.fastfood.dashboard.dto.ProductCreateDTO;
 import uz.fastfood.dashboard.dto.ProductDTO;
 import uz.fastfood.dashboard.dto.ProductUpdateDTO;
 import uz.fastfood.dashboard.entity.Product;
+import uz.fastfood.dashboard.mapper.ProductMapper;
 import uz.fastfood.dashboard.repository.ProductRepository;
 
 import java.util.UUID;

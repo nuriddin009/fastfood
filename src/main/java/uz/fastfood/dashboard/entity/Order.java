@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @Entity(name = "orders")
 public class Order extends BaseEntity {
 
-    private BigDecimal orderNumber;
+    private Integer orderNumber;
 
     private BigDecimal totalPrice;
     @ManyToOne
