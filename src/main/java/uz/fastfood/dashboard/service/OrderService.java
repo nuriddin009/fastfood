@@ -9,8 +9,11 @@ import java.util.UUID;
 
 public interface OrderService {
     BaseResponse<?> makeOrder(OrderRequest request, BaseResponse<?> response);
+
     BaseResponse<?> changeStatusOrder(UUID orderId, OrderStatus orderStatus, BaseResponse<?> response);
 
-    ApiResponse getOrders(OrderStatus orderStatus);
+    ApiResponse getOrders(OrderStatus orderStatus, Integer page, Integer size);
+
+    ApiResponse getOrdersV2(Integer page, Integer size);
 
 }

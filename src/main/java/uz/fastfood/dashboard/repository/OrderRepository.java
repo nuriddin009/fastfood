@@ -9,16 +9,13 @@ import uz.fastfood.dashboard.entity.Order;
 import uz.fastfood.dashboard.entity.enums.OrderStatus;
 import uz.fastfood.dashboard.projection.OrderProjection;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, UUID> {
 
 
-//    @Query(value = "", nativeQuery = true)
-//    Page<OrderProjection> getOrderByRow(OrderStatus status, Pageable pageable);
-
-
-
+    Page<OrderProjection> findAllByOrderStatusOrderByCreatedAtDesc(OrderStatus orderStatus, Pageable pageable);
 
 }

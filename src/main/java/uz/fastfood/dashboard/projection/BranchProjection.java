@@ -2,7 +2,8 @@ package uz.fastfood.dashboard.projection;
 
 public interface BranchProjection {
 
-    String getName();
+    String getNameUz();
+    String getNameRu();
     Double getLongitude();
     Double getLatitude();
 

@@ -5,4 +5,5 @@ public interface CustomerProjection {
     String getName();
     String getPhoneNumber();
 
+
 }

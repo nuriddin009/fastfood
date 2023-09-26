@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import uz.fastfood.dashboard.entity.enums.Status;
 import uz.fastfood.dashboard.entity.template.BaseEntity;
 
 import java.util.Collection;
@@ -28,6 +29,8 @@ public class User extends BaseEntity implements UserDetails {
     private String username;
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.ACTIVE;
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Token> tokens;
 

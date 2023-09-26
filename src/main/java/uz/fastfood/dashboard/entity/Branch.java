@@ -17,7 +17,6 @@ public class Branch extends BaseEntity {
     private String nameRu;
     private String landmark;
     private String workingTime;
-
     private Double longitude;
     private Double latitude;
 

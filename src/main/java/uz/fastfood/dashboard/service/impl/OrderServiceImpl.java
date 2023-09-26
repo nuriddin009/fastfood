@@ -2,6 +2,9 @@ package uz.fastfood.dashboard.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uz.fastfood.dashboard.dto.request.OrderItemRequest;
 import uz.fastfood.dashboard.dto.request.OrderRequest;
@@ -10,15 +13,14 @@ import uz.fastfood.dashboard.dto.response.BaseResponse;
 import uz.fastfood.dashboard.entity.Order;
 import uz.fastfood.dashboard.entity.Product;
 import uz.fastfood.dashboard.entity.enums.OrderStatus;
+import uz.fastfood.dashboard.projection.OrderProjection;
 import uz.fastfood.dashboard.repository.OrderRepository;
 import uz.fastfood.dashboard.repository.ProductRepository;
 import uz.fastfood.dashboard.service.OrderService;
 import uz.fastfood.dashboard.service.UserSession;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -78,13 +80,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ApiResponse getOrders(OrderStatus orderStatus) {
+    public ApiResponse getOrders(OrderStatus orderStatus, Integer page, Integer size) {
+        Page<OrderProjection> ordersByRow = orderRepository.findAllByOrderStatusOrderByCreatedAtDesc(orderStatus, PageRequest.of(page, size));
+        return new ApiResponse(true, ordersByRow, "Orders by rows");
+    }
 
+    @Override
+    public ApiResponse getOrdersV2(Integer page, Integer size) {
+        Map<OrderStatus, Page<OrderProjection>> listMap = new HashMap<>();
 
+        Pageable pageable = PageRequest.of(page - 1, size);
+        for (OrderStatus value : OrderStatus.values()) {
+            listMap.put(value, orderRepository.findAllByOrderStatusOrderByCreatedAtDesc(value, pageable));
+        }
 
-
-
-
-        return null;
+        return new ApiResponse(true, listMap, "Orders by columns");
     }
 }

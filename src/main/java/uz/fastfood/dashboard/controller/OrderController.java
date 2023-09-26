@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.fastfood.dashboard.dto.request.OrderRequest;
+import uz.fastfood.dashboard.dto.response.ApiResponse;
 import uz.fastfood.dashboard.dto.response.BaseResponse;
 import uz.fastfood.dashboard.entity.enums.OrderStatus;
 import uz.fastfood.dashboard.service.OrderService;
@@ -17,9 +18,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/order")
 public class OrderController {
-
-    private static final String URL = "/findAll";
-
 
     private final OrderService service;
 
@@ -36,7 +34,7 @@ public class OrderController {
     @PatchMapping(value = "update")
     public ResponseEntity<BaseResponse<?>> changeStatus(
             @RequestParam(name = "orderId") UUID orderId,
-            @RequestParam(name = "orderStatus") OrderStatus orderStatus
+            @RequestParam(name = "status") OrderStatus orderStatus
     ) {
         BaseResponse<?> response = new BaseResponse<>();
         response = service.changeStatusOrder(orderId, orderStatus, response);
@@ -44,12 +42,25 @@ public class OrderController {
         return new ResponseEntity<>(response, status);
     }
 
-
-
-
-    @GetMapping(URL)
-    public String getAll() {
-
-        return URL;
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+    @GetMapping("/byRow")
+    public ResponseEntity<ApiResponse> getOrdersByRows(
+            @RequestParam(defaultValue = "PENDING") OrderStatus status,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        return ResponseEntity.ok(service.getOrders(status, page, size));
     }
+
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+    @GetMapping("/byColumns")
+    public ResponseEntity<ApiResponse> getOrdersByColumns(
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        return ResponseEntity.ok(service.getOrdersV2(page, size));
+    }
+
+
 }

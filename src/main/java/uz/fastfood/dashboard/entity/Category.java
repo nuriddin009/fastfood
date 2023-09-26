@@ -26,10 +26,10 @@ public class Category extends BaseEntity {
     @Column(name = "name_ru", nullable = false)
     private String nameRu;
 
-    @Column(name = "parent_id")
-    private UUID parentId;
+//    @Column(name = "parent_id")
+//    private UUID parentId;
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id", updatable = false, insertable = false)
+    @JoinColumn(name = "parent_id", updatable = false)
     private Category parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
