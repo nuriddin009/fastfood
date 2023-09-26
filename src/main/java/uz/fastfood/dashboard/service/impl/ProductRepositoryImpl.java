@@ -1,0 +1,76 @@
+package uz.fastfood.dashboard.service.impl;
+
+import io.micrometer.common.util.StringUtils;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import uz.fastfood.dashboard.entity.Product;
+import uz.fastfood.dashboard.filter.ProductFilter;
+import uz.fastfood.dashboard.repository.ProductRepositoryCustom;
+
+@SuppressWarnings("unused")
+public class ProductRepositoryImpl  implements ProductRepositoryCustom {
+
+    @PersistenceContext(unitName = "slavePU")
+    private EntityManager entityManager;
+
+
+    @Override
+    public Page<Product> findALlByFilter(ProductFilter filter) {
+        final boolean hasSearch = StringUtils.isNotEmpty(filter.getSearch());
+        final boolean hasSort = StringUtils.isNotEmpty(filter.getOrderBy());
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("select p from Product p where 1=1 ");
+
+        if (filter.getFrom() != null) {
+            sql.append(" and p.createdAt>=:fromDate");
+        }
+        if (filter.getTo() != null) {
+            sql.append(" and p.createdAt<=:toDate");
+        }
+        if (filter.getCategoryId() != null) {
+            sql.append(" and p.categoryId=:categoryId ");
+        }
+        if (hasSearch) {
+            sql.append(" and (lower(p.nameUz) like :searchKey ");
+            sql.append(" or lower(p.nameRu) like :searchKey ");
+            sql.append(")");
+        }
+
+        String countSql = sql.toString().replaceFirst("select p", "select count(p)");
+        sql.append(" order by");
+        if (hasSort) {
+            sql.append(" p.").append(filter.getOrderBy());
+        } else {
+            sql.append(" p.id");
+        }
+        sql.append(" ").append(filter.getSortOrder().getName());
+
+        TypedQuery<Product> query = entityManager.createQuery(sql.toString(), Product.class)
+                .setFirstResult(filter.getStart()).setMaxResults(filter.getSize());
+
+        TypedQuery<Long> countQuery = entityManager.createQuery(countSql, Long.class);
+
+
+        if (filter.getCategoryId() != null) {
+            query.setParameter("categoryId", filter.getCategoryId());
+            countQuery.setParameter("categoryId", filter.getCategoryId());
+        }
+        if (filter.getFrom() != null) {
+            query.setParameter("from", filter.getFromDateTime());
+            countQuery.setParameter("from", filter.getFromDateTime());
+        }
+        if (filter.getTo() != null) {
+            query.setParameter("to", filter.getTo());
+        }
+        if (hasSearch) {
+            query.setParameter("searchKey", filter.getSearchForQuery());
+            countQuery.setParameter("searchKey", filter.getSearchForQuery());
+        }
+
+        return new PageImpl<>(query.getResultList(), filter.getPageable(), countQuery.getSingleResult());
+    }
+}
