@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class AttachmentDTO {
+public class AttachmentDTO extends BaseAuditDTO {
     private String filePath;
     private LocalDateTime createdAt;
 

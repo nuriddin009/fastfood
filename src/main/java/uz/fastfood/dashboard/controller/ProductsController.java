@@ -1,11 +1,13 @@
 package uz.fastfood.dashboard.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.fastfood.dashboard.dto.ProductCreateDTO;
 import uz.fastfood.dashboard.dto.ProductDTO;
 import uz.fastfood.dashboard.dto.ProductUpdateDTO;
+import uz.fastfood.dashboard.filter.ProductFilter;
 import uz.fastfood.dashboard.service.ProductsService;
 
 import java.util.UUID;
@@ -29,5 +31,10 @@ public class ProductsController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable UUID id) {
         return ResponseEntity.ok(productService.getProductById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ProductDTO>> getAllProducts(ProductFilter filter) {
+        return ResponseEntity.ok(productService.getAllProducts(filter));
     }
 }
