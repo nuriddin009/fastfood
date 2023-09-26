@@ -6,14 +6,15 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.stereotype.Component;
 import uz.fastfood.dashboard.entity.Product;
 import uz.fastfood.dashboard.filter.ProductFilter;
 import uz.fastfood.dashboard.repository.ProductRepositoryCustom;
 
-@SuppressWarnings("unused")
+@Component
 public class ProductRepositoryImpl  implements ProductRepositoryCustom {
 
-    @PersistenceContext(unitName = "slavePU")
+    @PersistenceContext
     private EntityManager entityManager;
 
 
@@ -26,17 +27,16 @@ public class ProductRepositoryImpl  implements ProductRepositoryCustom {
         sql.append("select p from Product p where 1=1 ");
 
         if (filter.getFrom() != null) {
-            sql.append(" and p.createdAt>=:fromDate");
+            sql.append(" and p.createdAt>=:from");
         }
         if (filter.getTo() != null) {
-            sql.append(" and p.createdAt<=:toDate");
+            sql.append(" and p.createdAt<=:to");
         }
         if (filter.getCategoryId() != null) {
-            sql.append(" and p.categoryId=:categoryId ");
+            sql.append(" and p.categoryId=:categoryId");
         }
         if (hasSearch) {
-            sql.append(" and (lower(p.nameUz) like :searchKey ");
-            sql.append(" or lower(p.nameRu) like :searchKey ");
+            sql.append(" and (lower(p.name) like :searchKey ");
             sql.append(")");
         }
 
@@ -60,11 +60,12 @@ public class ProductRepositoryImpl  implements ProductRepositoryCustom {
             countQuery.setParameter("categoryId", filter.getCategoryId());
         }
         if (filter.getFrom() != null) {
-            query.setParameter("from", filter.getFromDateTime());
-            countQuery.setParameter("from", filter.getFromDateTime());
+            query.setParameter("from", filter.getFrom());
+            countQuery.setParameter("from", filter.getFrom());
         }
         if (filter.getTo() != null) {
             query.setParameter("to", filter.getTo());
+            countQuery.setParameter("to", filter.getTo());
         }
         if (hasSearch) {
             query.setParameter("searchKey", filter.getSearchForQuery());
