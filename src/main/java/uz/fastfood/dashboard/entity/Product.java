@@ -28,16 +28,16 @@ public class Product extends BaseEntity {
     @Column(name = "price")
     private BigDecimal price;
 
-//    @Column(name = "attachment_id")
-//    private UUID attachmentId;
+    @Column(name = "attachment_id")
+    private UUID attachmentId;
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "attachment_id", updatable = false)
+    @JoinColumn(name = "attachment_id", updatable = false,insertable = false)
     private Attachment attachment;
 
-//    @Column(name = "category_id")
-//    private UUID categoryId;
+    @Column(name = "category_id")
+    private UUID categoryId;
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", updatable = false)
+    @JoinColumn(name = "category_id", updatable = false,insertable = false)
     private Category category;
 
 

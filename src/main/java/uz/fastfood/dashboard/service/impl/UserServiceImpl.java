@@ -1,6 +1,7 @@
 package uz.fastfood.dashboard.service.impl;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -8,12 +9,14 @@ import org.springframework.stereotype.Service;
 import uz.fastfood.dashboard.dto.request.ClientRequest;
 import uz.fastfood.dashboard.dto.response.ApiResponse;
 import uz.fastfood.dashboard.entity.User;
+import uz.fastfood.dashboard.entity.enums.Status;
 import uz.fastfood.dashboard.repository.UserRepository;
 import uz.fastfood.dashboard.service.UserService;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +42,14 @@ public class UserServiceImpl implements UserService {
     public ApiResponse getCustomers(String search, Integer page, Integer size, String nameSort, String orderSort, Boolean activeSort) {
 
 
-
         return null;
+    }
+
+    @Override
+    public ApiResponse changeUserStatus(UUID userId, Status status) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found with " + userId));
+        user.setStatus(status);
+        userRepository.save(user);
+        return new ApiResponse(true, "User updated");
     }
 }

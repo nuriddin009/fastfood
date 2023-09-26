@@ -31,7 +31,7 @@ public class UserSearchDao {
 
         Predicate firstnamePredicate = criteriaBuilder.like(root.get("firstname"), "%" + search + "%");
         Predicate lastnamePredicate = criteriaBuilder.like(root.get("lastname"), "%" + search + "%");
-        Predicate activePredicate = criteriaBuilder.like(root.get("status"), "%" + status + "%");
+        Predicate activePredicate = criteriaBuilder.equal(root.get("status"), status);
 
         Predicate orPredicate = criteriaBuilder.or(firstnamePredicate, lastnamePredicate);
 
@@ -47,7 +47,6 @@ public class UserSearchDao {
 
         return query.getResultList();
     }
-
 
 
 }
