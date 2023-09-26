@@ -37,6 +37,7 @@ public class ProductRepositoryImpl  implements ProductRepositoryCustom {
         }
         if (hasSearch) {
             sql.append(" and (lower(p.name) like :searchKey ");
+            sql.append(" or lower(p.description) like :searchKey ");
             sql.append(")");
         }
 
