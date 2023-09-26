@@ -1,6 +1,7 @@
 package uz.fastfood.dashboard.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class ProductsController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductDTO>> getAllProducts(ProductFilter filter) {
+    public ResponseEntity<Page<ProductDTO>> getAllProducts(@ParameterObject ProductFilter filter) {
         return ResponseEntity.ok(productService.getAllProducts(filter));
     }
 }
