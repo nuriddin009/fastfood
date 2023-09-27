@@ -6,13 +6,14 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import uz.fastfood.dashboard.entity.Product;
 import uz.fastfood.dashboard.filter.ProductFilter;
 import uz.fastfood.dashboard.repository.ProductRepositoryCustom;
 
 @Component
-public class ProductRepositoryImpl  implements ProductRepositoryCustom {
+public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -21,7 +22,7 @@ public class ProductRepositoryImpl  implements ProductRepositoryCustom {
     @Override
     public Page<Product> findALlByFilter(ProductFilter filter) {
         final boolean hasSearch = StringUtils.isNotEmpty(filter.getSearch());
-        final boolean hasSort = StringUtils.isNotEmpty(filter.getOrderBy());
+        final boolean hasSort = filter.formPageable().getSort().isSorted();
 
         StringBuilder sql = new StringBuilder();
         sql.append("select p from Product p where 1=1 ");
@@ -42,13 +43,19 @@ public class ProductRepositoryImpl  implements ProductRepositoryCustom {
         }
 
         String countSql = sql.toString().replaceFirst("select p", "select count(p)");
-        sql.append(" order by");
+        sql.append(" order by ");
         if (hasSort) {
-            sql.append(" p.").append(filter.getOrderBy());
+            for (Sort.Order order : filter.formPageable().getSort()) {
+                sql.append("p.").append(order.getProperty());
+                if (order.isDescending()) {
+                    sql.append(" desc");
+                }
+                sql.append(",");
+            }
+            sql.deleteCharAt(sql.length() - 1);
         } else {
             sql.append(" p.id");
         }
-        sql.append(" ").append(filter.getSortOrder().getName());
 
         TypedQuery<Product> query = entityManager.createQuery(sql.toString(), Product.class)
                 .setFirstResult(filter.getStart()).setMaxResults(filter.getSize());
