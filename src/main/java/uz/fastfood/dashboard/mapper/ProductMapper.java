@@ -10,8 +10,6 @@ import uz.fastfood.dashboard.entity.Product;
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
     Product toEntity(ProductCreateDTO productDTO);
-
     void updateEntity(@MappingTarget Product product, ProductUpdateDTO updateDTO);
-
     ProductDTO getProductDTO(Product product);
 }

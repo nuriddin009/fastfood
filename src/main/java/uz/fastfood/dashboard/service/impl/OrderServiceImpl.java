@@ -12,6 +12,7 @@ import uz.fastfood.dashboard.dto.response.ApiResponse;
 import uz.fastfood.dashboard.dto.response.BaseResponse;
 import uz.fastfood.dashboard.entity.Order;
 import uz.fastfood.dashboard.entity.Product;
+import uz.fastfood.dashboard.entity.User;
 import uz.fastfood.dashboard.entity.enums.OrderStatus;
 import uz.fastfood.dashboard.projection.OrderProjection;
 import uz.fastfood.dashboard.repository.OrderRepository;
@@ -95,5 +96,14 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return new ApiResponse(true, listMap, "Orders by columns");
+    }
+
+    @Override
+    public ApiResponse attachOperator(UUID orderId) {
+        User operator = userSession.getUser();
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("Order not found with id=" + orderId));
+        order.setOperator(operator);
+        orderRepository.save(order);
+        return new ApiResponse(true, "Operator attached");
     }
 }

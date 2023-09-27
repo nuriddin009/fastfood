@@ -14,4 +14,6 @@ public interface UserService {
     ApiResponse getCustomers(String search, Integer page, Integer size, String nameSort, String orderSort, Boolean activeSort);
 
     ApiResponse changeUserStatus(UUID userId, Status status);
+
+    void changeUserRole();
 }

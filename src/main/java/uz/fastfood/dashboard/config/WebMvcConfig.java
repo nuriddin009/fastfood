@@ -1,6 +1,7 @@
 package uz.fastfood.dashboard.config;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -31,19 +32,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResolver(new PushStateResourceResolver());
     }
 
-    private class PushStateResourceResolver implements ResourceResolver {
-        private Resource index = new ClassPathResource("/static/index.html");
-        private List<String> handledExtensions = Arrays.asList("html", "js", "json", "csv", "css", "png", "webp", "svg", "eot", "ttf", "otf", "woff", "appcache", "jpg", "jpeg", "gif", "ico");
-        private List<String> ignoredPaths = Arrays.asList("api");
+    private static class PushStateResourceResolver implements ResourceResolver {
+        private final Resource index = new ClassPathResource("/static/index.html");
+        private final List<String> handledExtensions = Arrays.asList("html", "js", "json", "csv", "css", "png", "webp", "svg", "eot", "ttf", "otf", "woff", "appcache", "jpg", "jpeg", "gif", "ico");
+        private final List<String> ignoredPaths = List.of("api");
 
 
         @Override
-        public Resource resolveResource(HttpServletRequest request, String requestPath, List<? extends Resource> locations, ResourceResolverChain chain) {
+        public Resource resolveResource(HttpServletRequest request, @NotNull String requestPath, @NotNull List<? extends Resource> locations, @NotNull ResourceResolverChain chain) {
             return resolve(requestPath, locations);
         }
 
         @Override
-        public String resolveUrlPath(String resourcePath, List<? extends Resource> locations, ResourceResolverChain chain) {
+        public String resolveUrlPath(@NotNull String resourcePath, @NotNull List<? extends Resource> locations, @NotNull ResourceResolverChain chain) {
             Resource resolvedResource = resolve(resourcePath, locations);
             if (resolvedResource == null) {
                 return null;
@@ -64,7 +65,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         .map(loc -> createRelative(loc, requestPath))
                         .filter(resource -> resource != null && resource.exists())
                         .findFirst()
-                        .orElseGet(null);
+                        .orElse(null);
             }
             return index;
         }

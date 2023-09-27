@@ -9,6 +9,7 @@ import uz.fastfood.dashboard.dto.CategoryDTO;
 import uz.fastfood.dashboard.dto.CategoryUpdateDTO;
 import uz.fastfood.dashboard.entity.Category;
 import uz.fastfood.dashboard.entity.Product;
+import uz.fastfood.dashboard.filter.CategoryFilter;
 import uz.fastfood.dashboard.filter.PageFilter;
 import uz.fastfood.dashboard.mapper.CategoryMapper;
 import uz.fastfood.dashboard.repository.CategoryRepository;
@@ -40,7 +41,7 @@ public class CategoryService {
         return categoryMapper.getCategoryDTO(category);
     }
 
-    public Page<CategoryDTO> getAllProducts(PageFilter filter) {
+    public Page<CategoryDTO> getAllProducts(CategoryFilter filter) {
         return categoryRepository.findAllByFilter(filter).map(categoryMapper::getCategoryDTO);
     }
 }

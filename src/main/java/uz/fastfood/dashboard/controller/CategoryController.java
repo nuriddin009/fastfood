@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.fastfood.dashboard.dto.*;
+import uz.fastfood.dashboard.filter.CategoryFilter;
 import uz.fastfood.dashboard.filter.PageFilter;
 import uz.fastfood.dashboard.filter.ProductFilter;
 import uz.fastfood.dashboard.service.CategoryService;
@@ -35,7 +36,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CategoryDTO>> getAllProducts(@ParameterObject PageFilter filter) {
+    public ResponseEntity<Page<CategoryDTO>> getAllProducts(@ParameterObject CategoryFilter filter) {
         return ResponseEntity.ok(categoryService.getAllProducts(filter));
     }
 

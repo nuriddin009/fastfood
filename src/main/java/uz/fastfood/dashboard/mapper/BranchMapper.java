@@ -10,11 +10,7 @@ import uz.fastfood.dashboard.entity.Order;
 
 @Mapper(componentModel = "spring")
 public interface BranchMapper extends BaseMapper<BranchDto, Branch> {
-
     @Mapping(target = "id", ignore = true)
     void updateEntity(BranchDto branchDto, @MappingTarget Branch branch);
-
-
-
     Branch toEntity(BranchDto branchDto);
 }

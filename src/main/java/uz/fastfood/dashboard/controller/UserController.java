@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.fastfood.dashboard.dto.response.ApiResponse;
+import uz.fastfood.dashboard.entity.User;
 import uz.fastfood.dashboard.entity.enums.Status;
 import uz.fastfood.dashboard.service.UserService;
 
@@ -36,6 +37,19 @@ public class UserController {
     ) {
         return ResponseEntity.ok(service.changeUserStatus(userId, status));
     }
+
+
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
+    @PatchMapping("change_role")
+    public ResponseEntity<?> changeUserRole(){
+
+        service.changeUserRole();
+
+
+        return ResponseEntity.ok(new User());
+    }
+
+
 
 
 }

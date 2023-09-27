@@ -12,4 +12,5 @@ public interface OrderService {
     BaseResponse<?> changeStatusOrder(UUID orderId, OrderStatus orderStatus, BaseResponse<?> response);
     ApiResponse getOrders(OrderStatus orderStatus, Integer page, Integer size);
     ApiResponse getOrdersV2(Integer page, Integer size);
+    ApiResponse attachOperator(UUID orderId);
 }
