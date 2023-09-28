@@ -20,7 +20,8 @@ public class Order extends BaseEntity {
 
     private Integer orderNumber;
 
-    private BigDecimal totalPrice;
+    private BigDecimal orderCost;
+    private BigDecimal shippingCost;
     @ManyToOne
     private User customer;
     @ManyToOne

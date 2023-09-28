@@ -21,6 +21,7 @@ public class OrderController {
 
     private final OrderService service;
 
+
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @PostMapping
     public ResponseEntity<BaseResponse<?>> makeOrder(@RequestBody @Valid OrderRequest request) {
@@ -47,7 +48,7 @@ public class OrderController {
     public ResponseEntity<ApiResponse> getOrdersByRows(
             @RequestParam(defaultValue = "PENDING") OrderStatus status,
             @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size
+            @RequestParam(defaultValue = "10", required = false) Integer size
     ) {
         return ResponseEntity.ok(service.getOrders(status, page, size));
     }
@@ -57,7 +58,7 @@ public class OrderController {
     @GetMapping("/byColumns")
     public ResponseEntity<ApiResponse> getOrdersByColumns(
             @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size
+            @RequestParam(defaultValue = "10", required = false) Integer size
     ) {
         return ResponseEntity.ok(service.getOrdersV2(page, size));
     }

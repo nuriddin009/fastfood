@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import uz.fastfood.dashboard.entity.Branch;
 import uz.fastfood.dashboard.projection.BranchProjection;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -20,6 +21,9 @@ public interface BranchRepository extends JpaRepository<Branch, UUID> {
                     "from branch b\n" +
                     "where (upper(b.name_uz) ilike upper('%' || :search || '%') or upper(b.name_ru) ilike upper('%' || :search || '%')) and b.deleted is false", nativeQuery = true)
     Page<BranchProjection> getBranches(String search, Pageable pageable);
+
+
+    List<Branch> findAllByDeletedFalse();
 
 
 }

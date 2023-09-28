@@ -12,7 +12,7 @@ import uz.fastfood.dashboard.mapper.ProductMapper;
 import uz.fastfood.dashboard.filter.ProductFilter;
 import uz.fastfood.dashboard.repository.ProductRepository;
 
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +39,6 @@ public class ProductsService {
     }
 
     public Page<ProductDTO> getAllProducts(ProductFilter filter) {
-       return productRepository.findALlByFilter(filter).map(productMapper::getProductDTO);
+        return productRepository.findALlByFilter(filter).map(productMapper::getProductDTO);
     }
 }

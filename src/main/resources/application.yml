@@ -25,12 +25,16 @@ application:
         expiration: 604800000 # 7 days
 
   minio:
-      application: fastFood
-      host: https://localhost:9090
-      username: fastFood
-      password: fastFood
+    application: fastFood
+    host: https://localhost:9090
+    username: fastFood
+    password: fastFood
 
 
 springdoc:
   swagger-ui:
     path: /
+
+yandex:
+  api:
+    key: 1ae016e1-f4ec-406e-b3f1-3cc2ad2daf5e
