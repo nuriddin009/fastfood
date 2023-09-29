@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import uz.fastfood.dashboard.entity.enums.CurrierStatus;
 import uz.fastfood.dashboard.entity.enums.Status;
 import uz.fastfood.dashboard.entity.template.BaseEntity;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class User extends BaseEntity implements UserDetails {
+public class User extends BaseEntity implements UserDetails, Serializable {
 
     @Column(nullable = false)
     private String firstname;
@@ -34,6 +36,9 @@ public class User extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Token> tokens;
 
+
+    @Enumerated(EnumType.STRING)
+    private CurrierStatus currierStatus;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
