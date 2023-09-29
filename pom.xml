@@ -38,7 +38,7 @@
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
-            <version>8.5.5</version>
+            <version>8.2.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/io.swagger/swagger-annotations -->
         <dependency>
@@ -46,6 +46,14 @@
             <artifactId>swagger-annotations</artifactId>
             <version>1.5.0</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.7</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springdoc</groupId>
