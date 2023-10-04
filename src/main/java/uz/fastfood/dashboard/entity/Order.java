@@ -6,7 +6,9 @@ import uz.fastfood.dashboard.entity.enums.OrderStatus;
 import uz.fastfood.dashboard.entity.template.BaseEntity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -29,8 +31,8 @@ public class Order extends BaseEntity {
     @ManyToOne
     private Branch branch;
 
-    @OneToMany /*(cascade = CascadeType.ALL, mappedBy = "order") */
-    private Set<OrderItem> orderItems = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")  /**/
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     private Double longitude;
     private Double latitude;

@@ -12,6 +12,7 @@ import uz.fastfood.dashboard.dto.response.ApiResponse;
 import uz.fastfood.dashboard.dto.response.BaseResponse;
 import uz.fastfood.dashboard.entity.*;
 import uz.fastfood.dashboard.entity.enums.OrderStatus;
+import uz.fastfood.dashboard.projection.OrderDetails;
 import uz.fastfood.dashboard.projection.OrderProjection;
 import uz.fastfood.dashboard.repository.BranchRepository;
 import uz.fastfood.dashboard.repository.OrderItemRepository;
@@ -45,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
 
             BigDecimal sum = BigDecimal.valueOf(0);
 
-            Set<OrderItem> orderItemList = new HashSet<>();
+            List<OrderItem> orderItemList = new ArrayList<>();
 
             for (OrderItemRequest orderItem : orderItems) {
                 Product product = productRepository.findById(orderItem.getProductId()).orElseThrow(() -> new NoSuchElementException("Product not found"));
@@ -81,9 +82,9 @@ public class OrderServiceImpl implements OrderService {
                     .orderItems(orderItemList)
                     .build());
 
-//            orderItemList.forEach(orderItem -> orderItem.setOrder(order));
-//            List<OrderItem> orderItemList1 = orderItemRepository.saveAll(orderItemList);
-//            System.out.println(orderItemList1);
+            orderItemList.forEach(orderItem -> orderItem.setOrder(order));
+            List<OrderItem> orderItemList1 = orderItemRepository.saveAll(orderItemList);
+            System.out.println(orderItemList1);
 
 
             response.setMessage("Order created");
@@ -112,7 +113,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ApiResponse getOrders(OrderStatus orderStatus, Integer page, Integer size) {
-        Page<OrderProjection> ordersByRow = orderRepository.findAllByOrderStatusOrderByCreatedAtDesc(orderStatus, PageRequest.of(page - 1, size));
+        Page<OrderProjection> ordersByRow = orderRepository.findAllByOrderStatusAndDeletedFalseOrderByCreatedAtDesc(orderStatus, PageRequest.of(page - 1, size));
         return new ApiResponse(true, ordersByRow, "Orders by rows");
     }
 
@@ -122,7 +123,7 @@ public class OrderServiceImpl implements OrderService {
 
         Pageable pageable = PageRequest.of(page - 1, size);
         for (OrderStatus value : OrderStatus.values()) {
-            listMap.put(value.name().toLowerCase(), orderRepository.findAllByOrderStatusOrderByCreatedAtDesc(value, pageable).getContent());
+            listMap.put(value.name().toLowerCase(), orderRepository.findAllByOrderStatusAndDeletedFalseOrderByCreatedAtDesc(value, pageable).getContent());
         }
         return new ApiResponse(true, listMap, "Orders by columns");
     }
@@ -138,11 +139,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ApiResponse deleteOrder(UUID orderId) {
-
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("Order not found with id=" + orderId));
+        order.setDeleted(true);
+        orderRepository.save(order);
+        return new ApiResponse(true, "order deleted");
+    }
 
-
-        return null;
+    @Override
+    public ApiResponse orderDetail(UUID orderId) {
+        OrderDetails order = orderRepository.findByIdAndDeletedFalse(orderId);
+        return new ApiResponse(true, order);
     }
 
 
@@ -160,9 +166,7 @@ public class OrderServiceImpl implements OrderService {
                 Math.cos(radiansLat1) * Math.cos(radiansLat2) *
                         Math.sin(dLon / 2) * Math.sin(dLon / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double distance = 6371 * c; // Radius of the Earth in kilometers
-
-        return distance;
+        return 6371 * c;
     }
 
     private Branch findNearestBranch(double myLat, double myLon) {

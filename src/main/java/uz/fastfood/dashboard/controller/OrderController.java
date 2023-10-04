@@ -66,6 +66,11 @@ public class OrderController {
 
     @GetMapping("detail")
     public ResponseEntity<?> orderDetails(@RequestParam UUID orderId){
+        return ResponseEntity.ok(service.orderDetail(orderId));
+    }
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
+    @DeleteMapping("delete")
+    public ResponseEntity<?> delete(@RequestParam UUID orderId){
         return ResponseEntity.ok(service.deleteOrder(orderId));
     }
 

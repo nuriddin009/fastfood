@@ -15,4 +15,6 @@ public interface OrderService {
     ApiResponse attachOperator(UUID orderId);
 
     ApiResponse deleteOrder(UUID orderId);
+
+    ApiResponse orderDetail(UUID orderId);
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uz.fastfood.dashboard.entity.Order;
 import uz.fastfood.dashboard.entity.enums.OrderStatus;
+import uz.fastfood.dashboard.projection.OrderDetails;
 import uz.fastfood.dashboard.projection.OrderProjection;
 
 import java.util.List;
@@ -16,6 +17,8 @@ import java.util.UUID;
 public interface OrderRepository extends JpaRepository<Order, UUID> {
 
 
-    Page<OrderProjection> findAllByOrderStatusOrderByCreatedAtDesc(OrderStatus orderStatus, Pageable pageable);
+    Page<OrderProjection> findAllByOrderStatusAndDeletedFalseOrderByCreatedAtDesc(OrderStatus orderStatus, Pageable pageable);
 
+
+    OrderDetails findByIdAndDeletedFalse(UUID id);
 }

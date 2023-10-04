@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Set;
 
 
-
-
 @Component
 @RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner {
@@ -191,7 +189,6 @@ public class DataLoader implements CommandLineRunner {
                         new BaseResponse<>()
                 );
             }
-
 
 
         }

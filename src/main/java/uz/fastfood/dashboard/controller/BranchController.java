@@ -23,7 +23,7 @@ public class BranchController {
     private final BranchService branchService;
 
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SU PER_ADMIN')")
     @GetMapping
     public ResponseEntity<ApiResponse> getBranches(
             @RequestParam(defaultValue = "") String search,
