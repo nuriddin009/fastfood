@@ -8,9 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 import uz.fastfood.dashboard.entity.Category;
-import uz.fastfood.dashboard.entity.Product;
 import uz.fastfood.dashboard.filter.CategoryFilter;
-import uz.fastfood.dashboard.filter.PageFilter;
 
 @Component
 public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
@@ -25,6 +23,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
         StringBuilder sql = new StringBuilder("select t from Category t where true ");
 
 
+        sql.append(" and t.deleted=false");
 
         if (filter.getFrom() != null) {
             sql.append(" and t.createdAt>=:from");

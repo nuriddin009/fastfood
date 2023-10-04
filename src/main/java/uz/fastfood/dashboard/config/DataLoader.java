@@ -5,15 +5,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import uz.fastfood.dashboard.dto.request.OrderItemRequest;
+import uz.fastfood.dashboard.dto.request.OrderRequest;
+import uz.fastfood.dashboard.dto.response.BaseResponse;
 import uz.fastfood.dashboard.entity.*;
 import uz.fastfood.dashboard.entity.enums.RoleName;
 import uz.fastfood.dashboard.repository.*;
+import uz.fastfood.dashboard.service.OrderService;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
-import static uz.fastfood.dashboard.entity.Branch.*;
+
 
 
 @Component
@@ -27,6 +31,8 @@ public class DataLoader implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final OrderRepository orderRepository;
+    private final OrderService service;
 
     @Transactional
     @Override
@@ -51,23 +57,23 @@ public class DataLoader implements CommandLineRunner {
         if (branchRepository.count() == 0) {
             List<Branch> branches = branchRepository.saveAll(
                     List.of(
-                            builder()
+                            Branch.builder()
                                     .landmark("Metro ro’parasida")
                                     .nameUz("Maksim Gorgiy")
                                     .nameRu("Maksim Gorgiy")
-                                    .latitude(38.8951)
-                                    .longitude(-77.0364)
+                                    .latitude(48.858844)
+                                    .longitude(2.294351)
                                     .workingTime("09:00 - 20:00")
                                     .build(),
-                            builder()
+                            Branch.builder()
                                     .landmark("Royson dom oldida")
                                     .nameUz("Xadra fast food")
                                     .nameRu("Xadra fast food")
-                                    .latitude(38.8951)
-                                    .longitude(-77.0364)
+                                    .latitude(40.689247)
+                                    .longitude(-74.044502)
                                     .workingTime("09:00 - 20:00")
                                     .build(),
-                            builder()
+                            Branch.builder()
                                     .landmark("Metro ro’parasida")
                                     .nameUz("Shaxrishton")
                                     .nameRu("Shaxrishton")
@@ -116,7 +122,7 @@ public class DataLoader implements CommandLineRunner {
             ));
 
 
-            productRepository.saveAll(List.of(
+            List<Product> products = productRepository.saveAll(List.of(
                     Product.builder()
                             .name("Lavash mini")
                             .price(BigDecimal.valueOf(18000))
@@ -160,6 +166,32 @@ public class DataLoader implements CommandLineRunner {
                             .attachmentId(attachments.get(2).getId())
                             .build()
             ));
+
+            if (orderRepository.count() == 0) {
+                service.makeOrder(
+                        new OrderRequest(
+                                List.of(
+                                        new OrderItemRequest(products.get(0).getId(), 2),
+                                        new OrderItemRequest(products.get(1).getId(), 3),
+                                        new OrderItemRequest(products.get(2).getId(), 5)
+                                ),
+                                38.8976804, -77.0391101
+                        ),
+                        new BaseResponse<>()
+                );
+                service.makeOrder(
+                        new OrderRequest(
+                                List.of(
+                                        new OrderItemRequest(products.get(3).getId(), 1),
+                                        new OrderItemRequest(products.get(4).getId(), 2),
+                                        new OrderItemRequest(products.get(5).getId(), 4)
+                                ),
+                                48.8976804, -72.0391101
+                        ),
+                        new BaseResponse<>()
+                );
+            }
+
 
 
         }

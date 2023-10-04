@@ -10,13 +10,11 @@ import uz.fastfood.dashboard.dto.request.OrderItemRequest;
 import uz.fastfood.dashboard.dto.request.OrderRequest;
 import uz.fastfood.dashboard.dto.response.ApiResponse;
 import uz.fastfood.dashboard.dto.response.BaseResponse;
-import uz.fastfood.dashboard.entity.Branch;
-import uz.fastfood.dashboard.entity.Order;
-import uz.fastfood.dashboard.entity.Product;
-import uz.fastfood.dashboard.entity.User;
+import uz.fastfood.dashboard.entity.*;
 import uz.fastfood.dashboard.entity.enums.OrderStatus;
 import uz.fastfood.dashboard.projection.OrderProjection;
 import uz.fastfood.dashboard.repository.BranchRepository;
+import uz.fastfood.dashboard.repository.OrderItemRepository;
 import uz.fastfood.dashboard.repository.OrderRepository;
 import uz.fastfood.dashboard.repository.ProductRepository;
 import uz.fastfood.dashboard.service.DistanceService;
@@ -25,6 +23,7 @@ import uz.fastfood.dashboard.service.UserSession;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +34,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final DistanceService distanceService;
     private final BranchRepository branchRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Override
     public BaseResponse<?> makeOrder(OrderRequest request, BaseResponse<?> response) {
@@ -45,8 +45,16 @@ public class OrderServiceImpl implements OrderService {
 
             BigDecimal sum = BigDecimal.valueOf(0);
 
+            Set<OrderItem> orderItemList = new HashSet<>();
+
             for (OrderItemRequest orderItem : orderItems) {
                 Product product = productRepository.findById(orderItem.getProductId()).orElseThrow(() -> new NoSuchElementException("Product not found"));
+
+                orderItemList.add(orderItemRepository.save(OrderItem.builder()
+                        .product(product)
+                        .quantity(orderItem.getQuantity())
+                        .build()));
+
 
                 BigDecimal productCount = BigDecimal.valueOf(orderItem.getQuantity());
                 BigDecimal totalPriceForItem = productCount.multiply(product.getPrice());
@@ -55,10 +63,10 @@ public class OrderServiceImpl implements OrderService {
 
             Branch nearestBranch = findNearestBranch(request.getLatitude(), request.getLongitude());
 
-            double distance = distanceService.calculateDistance(
+            double distance = 10; /*distanceService.calculateDistance(
                     request.getLatitude(), request.getLongitude(),
                     nearestBranch.getLatitude(), nearestBranch.getLongitude()
-            );
+            ); */
 
 
             Order order = orderRepository.save(Order.builder()
@@ -70,13 +78,19 @@ public class OrderServiceImpl implements OrderService {
                     .latitude(request.getLatitude())
                     .longitude(request.getLongitude())
                     .branch(nearestBranch)
+                    .orderItems(orderItemList)
                     .build());
+
+//            orderItemList.forEach(orderItem -> orderItem.setOrder(order));
+//            List<OrderItem> orderItemList1 = orderItemRepository.saveAll(orderItemList);
+//            System.out.println(orderItemList1);
 
 
             response.setMessage("Order created");
         } catch (Exception e) {
             response.setError(true);
             response.setMessage(e.getMessage());
+            e.printStackTrace();
         }
         return response;
     }
@@ -98,19 +112,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ApiResponse getOrders(OrderStatus orderStatus, Integer page, Integer size) {
-        Page<OrderProjection> ordersByRow = orderRepository.findAllByOrderStatusOrderByCreatedAtDesc(orderStatus, PageRequest.of(page, size));
+        Page<OrderProjection> ordersByRow = orderRepository.findAllByOrderStatusOrderByCreatedAtDesc(orderStatus, PageRequest.of(page - 1, size));
         return new ApiResponse(true, ordersByRow, "Orders by rows");
     }
 
     @Override
     public ApiResponse getOrdersV2(Integer page, Integer size) {
-        Map<OrderStatus, Page<OrderProjection>> listMap = new HashMap<>();
+        Map<String, List<OrderProjection>> listMap = new HashMap<>();
 
         Pageable pageable = PageRequest.of(page - 1, size);
         for (OrderStatus value : OrderStatus.values()) {
-            listMap.put(value, orderRepository.findAllByOrderStatusOrderByCreatedAtDesc(value, pageable));
+            listMap.put(value.name().toLowerCase(), orderRepository.findAllByOrderStatusOrderByCreatedAtDesc(value, pageable).getContent());
         }
-
         return new ApiResponse(true, listMap, "Orders by columns");
     }
 
@@ -121,6 +134,15 @@ public class OrderServiceImpl implements OrderService {
         order.setOperator(operator);
         orderRepository.save(order);
         return new ApiResponse(true, "Operator attached");
+    }
+
+    @Override
+    public ApiResponse deleteOrder(UUID orderId) {
+
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("Order not found with id=" + orderId));
+
+
+        return null;
     }
 
 

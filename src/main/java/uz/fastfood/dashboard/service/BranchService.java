@@ -11,5 +11,5 @@ public interface BranchService {
     ApiResponse getBranches(String search, Integer page);
     ApiResponse delete(UUID branchId);
     ApiResponse updateBranch(BranchDto branchDto);
-    BaseResponse<Branch> createBranch(BranchDto branchDto,BaseResponse<Branch> response);
+    BaseResponse<Branch> createBranch(BranchDto branchDto, BaseResponse<Branch> response);
 }

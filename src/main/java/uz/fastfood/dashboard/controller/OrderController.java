@@ -22,7 +22,7 @@ public class OrderController {
     private final OrderService service;
 
 
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @PostMapping
     public ResponseEntity<BaseResponse<?>> makeOrder(@RequestBody @Valid OrderRequest request) {
         BaseResponse<?> response = new BaseResponse<>();
@@ -43,7 +43,7 @@ public class OrderController {
         return new ResponseEntity<>(response, status);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @GetMapping("/byRow")
     public ResponseEntity<ApiResponse> getOrdersByRows(
             @RequestParam(defaultValue = "PENDING") OrderStatus status,
@@ -54,13 +54,19 @@ public class OrderController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @GetMapping("/byColumns")
     public ResponseEntity<ApiResponse> getOrdersByColumns(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10", required = false) Integer size
     ) {
         return ResponseEntity.ok(service.getOrdersV2(page, size));
+    }
+
+
+    @GetMapping("detail")
+    public ResponseEntity<?> orderDetails(@RequestParam UUID orderId){
+        return ResponseEntity.ok(service.deleteOrder(orderId));
     }
 
 

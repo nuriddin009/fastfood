@@ -40,4 +40,10 @@ public class ProductsController {
     public ResponseEntity<Page<ProductDTO>> getAllProducts(@ParameterObject ProductFilter filter) {
         return ResponseEntity.ok(productService.getAllProducts(filter));
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
+    @DeleteMapping("delete")
+    public ResponseEntity<?> deleteProduct(@RequestParam UUID id){
+        return ResponseEntity.ok(productService.deleteProduct(id));
+    }
 }

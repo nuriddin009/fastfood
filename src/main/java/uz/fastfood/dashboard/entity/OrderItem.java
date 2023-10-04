@@ -2,6 +2,7 @@ package uz.fastfood.dashboard.entity;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 import uz.fastfood.dashboard.entity.template.BaseEntity;
@@ -13,14 +14,10 @@ import uz.fastfood.dashboard.entity.template.BaseEntity;
 @NoArgsConstructor
 @Entity
 public class OrderItem extends BaseEntity {
-
-
     @ManyToOne
     private Product product;
-
-    private int productCount;
-
-    
-
-
+    private int quantity;
+//    @ManyToOne
+//    @JoinColumn(name = "order_id")
+//    private Order order;
 }

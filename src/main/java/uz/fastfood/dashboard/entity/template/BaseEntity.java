@@ -17,13 +17,10 @@ public abstract class BaseEntity extends UserAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
     @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
-
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
     private boolean deleted = false;
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import uz.fastfood.dashboard.dto.CategoryCreateDTO;
 import uz.fastfood.dashboard.dto.CategoryDTO;
 import uz.fastfood.dashboard.dto.CategoryUpdateDTO;
+import uz.fastfood.dashboard.dto.response.ApiResponse;
 import uz.fastfood.dashboard.entity.Category;
 import uz.fastfood.dashboard.entity.Product;
 import uz.fastfood.dashboard.filter.CategoryFilter;
@@ -43,5 +44,12 @@ public class CategoryService {
 
     public Page<CategoryDTO> getAllProducts(CategoryFilter filter) {
         return categoryRepository.findAllByFilter(filter).map(categoryMapper::getCategoryDTO);
+    }
+
+    public Object delete(UUID id) {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Category not found"));
+        category.setDeleted(true);
+        categoryRepository.save(category);
+        return new ApiResponse(true,"Category deleted");
     }
 }
