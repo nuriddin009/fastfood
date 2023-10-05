@@ -23,7 +23,7 @@ public class BranchController {
     private final BranchService branchService;
 
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SU PER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SU PER_ADMIN')")
     @GetMapping
     public ResponseEntity<ApiResponse> getBranches(
             @RequestParam(defaultValue = "") String search,
@@ -32,7 +32,7 @@ public class BranchController {
         return ResponseEntity.ok(branchService.getBranches(search, page));
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @DeleteMapping
     public ResponseEntity<ApiResponse> deleteBranch(
             @RequestParam UUID branchId
@@ -40,7 +40,7 @@ public class BranchController {
         return ResponseEntity.ok(branchService.delete(branchId));
     }
 
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+//    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @PostMapping
     public ResponseEntity<BaseResponse<?>> createBranch(
             @RequestBody @Valid BranchDto request
@@ -51,7 +51,7 @@ public class BranchController {
         return new ResponseEntity<>(response, status);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @PutMapping(value = "update")
     public ResponseEntity<ApiResponse> updateBranch(
             @RequestBody @Valid BranchDto request

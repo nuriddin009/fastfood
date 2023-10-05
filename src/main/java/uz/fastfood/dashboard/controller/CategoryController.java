@@ -21,12 +21,12 @@ import java.util.UUID;
 public class CategoryController {
     private final CategoryService categoryService;
 
-    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
     @PostMapping
     public ResponseEntity<CategoryCreateDTO> createCategory(@RequestBody CategoryCreateDTO createDTO) {
         return ResponseEntity.ok(categoryService.create(createDTO));
     }
-    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
     @PutMapping
     public ResponseEntity<CategoryUpdateDTO> updateCategory(@RequestBody CategoryUpdateDTO updateDTO) {
         return ResponseEntity.ok(categoryService.update(updateDTO));
@@ -41,7 +41,7 @@ public class CategoryController {
     public ResponseEntity<Page<CategoryDTO>> getAllProducts(@ParameterObject CategoryFilter filter) {
         return ResponseEntity.ok(categoryService.getAllProducts(filter));
     }
-    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
     @DeleteMapping("delete")
     public ResponseEntity<?> delete(@RequestParam UUID id){
         return ResponseEntity.ok(categoryService.delete(id));

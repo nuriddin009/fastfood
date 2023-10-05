@@ -19,13 +19,13 @@ import java.util.UUID;
 @RequestMapping("api/v1/products")
 public class ProductsController {
     private final ProductsService productService;
-    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
     @PostMapping
     public ResponseEntity<ProductCreateDTO> createProduct(@RequestBody ProductCreateDTO createDTO) {
         return ResponseEntity.ok(productService.create(createDTO));
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
     @PutMapping
     public ResponseEntity<ProductUpdateDTO> updateProduct(@RequestBody ProductUpdateDTO updateDTO) {
         return ResponseEntity.ok(productService.update(updateDTO));
@@ -41,7 +41,7 @@ public class ProductsController {
         return ResponseEntity.ok(productService.getAllProducts(filter));
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
     @DeleteMapping("delete")
     public ResponseEntity<?> deleteProduct(@RequestParam UUID id){
         return ResponseEntity.ok(productService.deleteProduct(id));
