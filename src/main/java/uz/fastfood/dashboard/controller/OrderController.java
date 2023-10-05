@@ -23,7 +23,7 @@ public class OrderController {
 
 
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_CURRIER', 'ROLE_OPERATOR','ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_CURRIER', 'ROLE_OPERATOR','ROLE_SUPER_ADMIN')")
     @PostMapping
     public ResponseEntity<BaseResponse<?>> makeOrder(@RequestBody @Valid OrderRequest request) {
         BaseResponse<?> response = new BaseResponse<>();
@@ -32,7 +32,7 @@ public class OrderController {
         return new ResponseEntity<>(response, status);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     @PostMapping("by_admin")
     public ResponseEntity<BaseResponse<?>> makeOrderByAdmin(@RequestBody @Valid OrderRequest request) {
         BaseResponse<?> response = new BaseResponse<>();
@@ -41,7 +41,7 @@ public class OrderController {
         return new ResponseEntity<>(response, status);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @PatchMapping(value = "update")
     public ResponseEntity<BaseResponse<?>> changeStatus(
             @RequestParam(name = "orderId") UUID orderId,
@@ -79,7 +79,7 @@ public class OrderController {
         return ResponseEntity.ok(service.orderDetail(orderId));
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
     @DeleteMapping("delete")
     public ResponseEntity<?> delete(@RequestParam UUID orderId) {
         return ResponseEntity.ok(service.deleteOrder(orderId));
