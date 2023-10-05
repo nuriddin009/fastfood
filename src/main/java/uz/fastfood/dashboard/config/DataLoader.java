@@ -5,13 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import uz.fastfood.dashboard.dto.request.OrderItemRequest;
-import uz.fastfood.dashboard.dto.request.OrderRequest;
-import uz.fastfood.dashboard.dto.response.BaseResponse;
 import uz.fastfood.dashboard.entity.*;
+import uz.fastfood.dashboard.entity.enums.OrderStatus;
 import uz.fastfood.dashboard.entity.enums.RoleName;
 import uz.fastfood.dashboard.repository.*;
-import uz.fastfood.dashboard.service.OrderService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,7 +27,8 @@ public class DataLoader implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final OrderRepository orderRepository;
-    private final OrderService service;
+    private final OrderItemRepository orderItemRepository;
+
 
     @Transactional
     @Override
@@ -41,6 +39,8 @@ public class DataLoader implements CommandLineRunner {
             Role role_user = roleRepository.save(Role.builder().name(RoleName.ROLE_USER).build());
             Role role_admin = roleRepository.save(Role.builder().name(RoleName.ROLE_ADMIN).build());
             Role role_super_admin = roleRepository.save(Role.builder().name(RoleName.ROLE_SUPER_ADMIN).build());
+            Role role_operator = roleRepository.save(Role.builder().name(RoleName.ROLE_OPERATOR).build());
+            Role role_currier = roleRepository.save(Role.builder().name(RoleName.ROLE_CURRIER).build());
             userRepository.save(User.builder()
                     .username("admin")
                     .phoneNumber("+998991234567")
@@ -49,6 +49,36 @@ public class DataLoader implements CommandLineRunner {
                     .lastname("Adminjonov")
                     .roles(Set.of(role_user, role_admin, role_super_admin))
                     .build());
+
+
+            User operator1 = userRepository.save(User.builder()
+                    .firstname("Test")
+                    .lastname("Operator")
+                    .password(passwordEncoder.encode("root123"))
+                    .username("operator1")
+                    .phoneNumber("+998941234567")
+                    .roles(Set.of(role_user, role_operator))
+                    .build());
+            User operator2 = userRepository.save(User.builder()
+                    .firstname("Operator")
+                    .lastname("tog'o")
+                    .password(passwordEncoder.encode("root123"))
+                    .username("operator2")
+                    .phoneNumber("+998911234567")
+                    .roles(Set.of(role_user, role_operator))
+                    .build());
+
+
+            User customer = userRepository.save(User.builder()
+                    .firstname("Deveeprasad")
+                    .lastname("Acharya")
+                    .password(passwordEncoder.encode("root123"))
+                    .username("customer")
+                    .phoneNumber("+998971234567")
+                    .roles(Set.of(role_user))
+                    .build());
+
+
         }
 
 
@@ -166,28 +196,74 @@ public class DataLoader implements CommandLineRunner {
             ));
 
             if (orderRepository.count() == 0) {
-                service.makeOrder(
-                        new OrderRequest(
-                                List.of(
-                                        new OrderItemRequest(products.get(0).getId(), 2),
-                                        new OrderItemRequest(products.get(1).getId(), 3),
-                                        new OrderItemRequest(products.get(2).getId(), 5)
-                                ),
-                                38.8976804, -77.0391101
-                        ),
-                        new BaseResponse<>()
-                );
-                service.makeOrder(
-                        new OrderRequest(
-                                List.of(
-                                        new OrderItemRequest(products.get(3).getId(), 1),
-                                        new OrderItemRequest(products.get(4).getId(), 2),
-                                        new OrderItemRequest(products.get(5).getId(), 4)
-                                ),
-                                48.8976804, -72.0391101
-                        ),
-                        new BaseResponse<>()
-                );
+
+                User customer = userRepository.findByUsername("customer").get();
+
+                List<Branch> branches = branchRepository.findAllByDeletedFalse();
+
+
+                List<OrderItem> orderItemList1 = orderItemRepository.saveAll(List.of(
+                        OrderItem.builder()
+                                .quantity(4)
+                                .product(products.get(0))
+                                .build(),
+                        OrderItem.builder()
+                                .quantity(4)
+                                .product(products.get(1))
+                                .build(),
+                        OrderItem.builder()
+                                .quantity(2)
+                                .product(products.get(2))
+                                .build()
+                ));
+
+                List<OrderItem> orderItemList2 = orderItemRepository.saveAll(List.of(
+                        OrderItem.builder()
+                                .quantity(3)
+                                .product(products.get(4))
+                                .build(),
+                        OrderItem.builder()
+                                .quantity(1)
+                                .product(products.get(5))
+                                .build(),
+                        OrderItem.builder()
+                                .quantity(6)
+                                .product(products.get(3))
+                                .build()
+                ));
+
+
+                Order order1 = orderRepository.save(Order.builder()
+                        .operator(userRepository.findByUsername("operator1").get())
+                        .branch(branches.get(0))
+                        .customer(customer)
+                        .orderCost(BigDecimal.valueOf(200000))
+                        .orderNumber(1)
+                        .shippingCost(BigDecimal.valueOf(1000))
+                        .orderStatus(OrderStatus.PENDING)
+                        .latitude(38.8976804)
+                        .longitude(-77.0391101)
+                        .orderItems(orderItemList1)
+                        .build());
+
+                Order order2 = orderRepository.save(Order.builder()
+                        .operator(userRepository.findByUsername("operator2").get())
+                        .branch(branches.get(0))
+                        .customer(customer)
+                        .orderCost(BigDecimal.valueOf(156000))
+                        .shippingCost(BigDecimal.valueOf(6000))
+                        .orderNumber(1)
+                        .orderStatus(OrderStatus.PENDING)
+                        .latitude(23.8776804)
+                        .longitude(-55.0391101)
+                        .orderItems(orderItemList1)
+                        .build());
+
+                orderItemList1.forEach(orderItem -> orderItem.setOrder(order1));
+                orderItemRepository.saveAll(orderItemList1);
+                orderItemList2.forEach(orderItem -> orderItem.setOrder(order2));
+                orderItemRepository.saveAll(orderItemList2);
+
             }
 
 

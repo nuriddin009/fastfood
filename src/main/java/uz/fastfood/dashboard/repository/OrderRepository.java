@@ -1,5 +1,6 @@
 package uz.fastfood.dashboard.repository;
 
+import lombok.Data;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uz.fastfood.dashboard.entity.Order;
 import uz.fastfood.dashboard.entity.enums.OrderStatus;
+import uz.fastfood.dashboard.projection.MaxOrderNumber;
 import uz.fastfood.dashboard.projection.OrderDetails;
 import uz.fastfood.dashboard.projection.OrderProjection;
 
@@ -21,4 +23,13 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
 
     OrderDetails findByIdAndDeletedFalse(UUID id);
+
+    @Query(value = "select coalesce(max(o.order_number), 0) as orderNumber,\n" +
+            "       count(o.id)                      as orderSize\n" +
+            "from orders o\n" +
+            "where o.branch_id = :branchId\n" +
+            "  and o.order_status <> 'DELIVERED'", nativeQuery = true)
+    MaxOrderNumber getMaxOrderNumber(UUID branchId);
+
+
 }

@@ -21,6 +21,7 @@ import uz.fastfood.dashboard.repository.ProductRepository;
 import uz.fastfood.dashboard.service.DistanceService;
 import uz.fastfood.dashboard.service.OrderService;
 import uz.fastfood.dashboard.service.UserSession;
+import uz.fastfood.dashboard.utils.OrderNumberCreator;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -36,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
     private final DistanceService distanceService;
     private final BranchRepository branchRepository;
     private final OrderItemRepository orderItemRepository;
+    private final OrderNumberCreator orderNumberCreator;
 
     @Override
     public BaseResponse<?> makeOrder(OrderRequest request, BaseResponse<?> response) {
@@ -64,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
 
             Branch nearestBranch = findNearestBranch(request.getLatitude(), request.getLongitude());
 
-            double distance = 10; /*distanceService.calculateDistance(
+            double distance = 5; /*distanceService.calculateDistance(
                     request.getLatitude(), request.getLongitude(),
                     nearestBranch.getLatitude(), nearestBranch.getLongitude()
             ); */
@@ -74,6 +76,7 @@ public class OrderServiceImpl implements OrderService {
                     .customer(userSession.getUser())
                     .operator(null)
                     .orderCost(sum)
+                    .orderNumber(orderNumberCreator.createOrderNumber(nearestBranch))
                     .shippingCost(calculateShippingCost(distance))
                     .orderStatus(OrderStatus.PENDING)
                     .latitude(request.getLatitude())
@@ -94,6 +97,13 @@ public class OrderServiceImpl implements OrderService {
             e.printStackTrace();
         }
         return response;
+    }
+
+    @Override
+    public BaseResponse<?> makeOrderByAdmin(OrderRequest request, BaseResponse<?> response) {
+
+
+        return null;
     }
 
     @Override
