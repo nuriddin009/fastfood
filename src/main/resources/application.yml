@@ -15,10 +15,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 
 
 server:
@@ -27,10 +30,10 @@ application:
 
 
   minio:
-      applicationName: fastFood
-      host: https://localhost:9090
-      username: fastFood
-      password: fastFood
+    applicationName: fastFood
+    host: https://localhost:9090
+    username: fastFood
+    password: fastFood
 
 
 springdoc:

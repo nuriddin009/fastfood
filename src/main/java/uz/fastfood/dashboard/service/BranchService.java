@@ -8,7 +8,7 @@ import uz.fastfood.dashboard.entity.Branch;
 import java.util.UUID;
 
 public interface BranchService {
-    ApiResponse getBranches(String search, Integer page);
+    ApiResponse getBranches(String search, Integer page,Integer size);
     ApiResponse delete(UUID branchId);
     ApiResponse updateBranch(BranchDto branchDto);
     BaseResponse<Branch> createBranch(BranchDto branchDto, BaseResponse<Branch> response);

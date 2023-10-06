@@ -1,6 +1,7 @@
 package uz.fastfood.dashboard.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +13,7 @@ import uz.fastfood.dashboard.dto.response.ApiResponse;
 import uz.fastfood.dashboard.dto.response.BaseResponse;
 import uz.fastfood.dashboard.entity.*;
 import uz.fastfood.dashboard.entity.enums.OrderStatus;
+import uz.fastfood.dashboard.filter.OrderFilter;
 import uz.fastfood.dashboard.projection.OrderDetails;
 import uz.fastfood.dashboard.projection.OrderProjection;
 import uz.fastfood.dashboard.repository.BranchRepository;
@@ -106,6 +108,7 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
+    @Transactional
     @Override
     public BaseResponse<?> changeStatusOrder(UUID orderId, OrderStatus orderStatus, BaseResponse<?> response) {
         try {
@@ -113,17 +116,18 @@ public class OrderServiceImpl implements OrderService {
                     .orElseThrow(() -> new EntityNotFoundException(orderId + " not found"));
             order.setOrderStatus(orderStatus);
             orderRepository.save(order);
-            response.setMessage("Order status changed to " + orderStatus);
+            response.setMessage("Order status changed to " + orderStatus.name());
         } catch (Exception e) {
             response.setError(true);
             response.setMessage(e.getMessage());
+            e.printStackTrace();
         }
         return response;
     }
 
     @Override
     public ApiResponse getOrders(OrderStatus orderStatus, Integer page, Integer size) {
-        Page<OrderProjection> ordersByRow = orderRepository.findAllByOrderStatusAndDeletedFalseOrderByCreatedAtDesc(orderStatus, PageRequest.of(page - 1, size));
+        Page<OrderProjection> ordersByRow = orderRepository.getOrdersByOrderStatus(orderStatus.name(), PageRequest.of(page - 1, size));
         return new ApiResponse(true, ordersByRow, "Orders by rows");
     }
 
@@ -133,8 +137,9 @@ public class OrderServiceImpl implements OrderService {
 
         Pageable pageable = PageRequest.of(page - 1, size);
         for (OrderStatus value : OrderStatus.values()) {
-            listMap.put(value.name().toLowerCase(), orderRepository.findAllByOrderStatusAndDeletedFalseOrderByCreatedAtDesc(value, pageable).getContent());
+            listMap.put(value.name().toLowerCase(), orderRepository.getOrdersByOrderStatus(value.name(), pageable).getContent());
         }
+
         return new ApiResponse(true, listMap, "Orders by columns");
     }
 

@@ -25,8 +25,8 @@ public class BranchServiceImpl implements BranchService {
     private final BranchMapper branchMapper;
 
     @Override
-    public ApiResponse getBranches(String search, Integer page) {
-        Page<BranchProjection> branches = branchRepository.getBranches(search, PageRequest.of(0, page - 1));
+    public ApiResponse getBranches(String search, Integer page, Integer size) {
+        Page<BranchProjection> branches = branchRepository.getBranches(search, PageRequest.of(page - 1, size));
         return new ApiResponse(true, branches, "Branches");
     }
 

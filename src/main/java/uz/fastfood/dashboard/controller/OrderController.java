@@ -2,6 +2,7 @@ package uz.fastfood.dashboard.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,6 +11,7 @@ import uz.fastfood.dashboard.dto.request.OrderRequest;
 import uz.fastfood.dashboard.dto.response.ApiResponse;
 import uz.fastfood.dashboard.dto.response.BaseResponse;
 import uz.fastfood.dashboard.entity.enums.OrderStatus;
+import uz.fastfood.dashboard.filter.OrderFilter;
 import uz.fastfood.dashboard.service.OrderService;
 
 import java.util.UUID;
@@ -22,8 +24,7 @@ public class OrderController {
     private final OrderService service;
 
 
-
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_CURRIER', 'ROLE_OPERATOR','ROLE_SUPER_ADMIN')")
+    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_CURRIER', 'ROLE_OPERATOR','ROLE_SUPER_ADMIN')")
     @PostMapping
     public ResponseEntity<BaseResponse<?>> makeOrder(@RequestBody @Valid OrderRequest request) {
         BaseResponse<?> response = new BaseResponse<>();
@@ -32,7 +33,7 @@ public class OrderController {
         return new ResponseEntity<>(response, status);
     }
 
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
+    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     @PostMapping("by_admin")
     public ResponseEntity<BaseResponse<?>> makeOrderByAdmin(@RequestBody @Valid OrderRequest request) {
         BaseResponse<?> response = new BaseResponse<>();
@@ -41,7 +42,7 @@ public class OrderController {
         return new ResponseEntity<>(response, status);
     }
 
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @PatchMapping(value = "update")
     public ResponseEntity<BaseResponse<?>> changeStatus(
             @RequestParam(name = "orderId") UUID orderId,
@@ -79,7 +80,7 @@ public class OrderController {
         return ResponseEntity.ok(service.orderDetail(orderId));
     }
 
-//    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
+    //    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
     @DeleteMapping("delete")
     public ResponseEntity<?> delete(@RequestParam UUID orderId) {
         return ResponseEntity.ok(service.deleteOrder(orderId));

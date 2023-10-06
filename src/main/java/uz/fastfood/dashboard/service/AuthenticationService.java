@@ -37,7 +37,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final RoleRepository roleRepository;
     private final UserSession userSession;
-    private final UserRepository userRepository;
+
 
     public AuthenticationResponse register(RegisterRequest request) {
         Role role = roleRepository.save(Role.builder().name(RoleName.ROLE_USER).build());

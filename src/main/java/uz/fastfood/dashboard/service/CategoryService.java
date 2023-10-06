@@ -46,7 +46,7 @@ public class CategoryService {
         return categoryRepository.findAllByFilter(filter).map(categoryMapper::getCategoryDTO);
     }
 
-    public Object delete(UUID id) {
+    public ApiResponse delete(UUID id) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Category not found"));
         category.setDeleted(true);
         categoryRepository.save(category);
