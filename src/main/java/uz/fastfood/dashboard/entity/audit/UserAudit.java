@@ -16,14 +16,9 @@ import uz.fastfood.dashboard.entity.User;
 public abstract class UserAudit {
 
     @CreatedBy
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinColumn(updatable = false)
-    private User createdBy;
+    private String createdBy;
 
     @LastModifiedBy
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User updatedBy;
+    private String updatedBy;
 
 }

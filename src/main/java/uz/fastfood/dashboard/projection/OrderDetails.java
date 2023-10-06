@@ -17,10 +17,13 @@ public interface OrderDetails {
 
     BigDecimal getShippingCost();
 
+    @Value("#{@orderRepository.findOrderCustomer(target.id)}")
     CustomerProjection getCustomer();
 
+    @Value("#{@orderRepository.findOrderOperator(target.id)}")
     CustomerProjection getOperator();
 
+    @Value("#{@orderRepository.findOrderBranch(target.id)}")
     BranchProjection getBranch();
 
     List<OrderItemProjection> getOrderItems();
