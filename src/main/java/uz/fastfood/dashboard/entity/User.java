@@ -38,7 +38,7 @@ public class User extends BaseEntity implements UserDetails, Serializable {
 
 
     @Enumerated(EnumType.STRING)
-    private CurrierStatus currierStatus;
+    private CurrierStatus currierStatus = CurrierStatus.OFFLINE;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -53,8 +53,28 @@ public class User extends BaseEntity implements UserDetails, Serializable {
         return roles;
     }
 
-    private boolean accountNonExpired = true;
-    private boolean accountNonLocked = true;
-    private boolean credentialsNonExpired = true;
-    private boolean enabled = true;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+//    private boolean accountNonExpired = true;
+//    private boolean accountNonLocked = true;
+//    private boolean credentialsNonExpired = true;
+//    private boolean enabled = true;
 }
