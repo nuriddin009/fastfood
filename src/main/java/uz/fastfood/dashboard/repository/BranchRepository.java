@@ -14,12 +14,20 @@ import java.util.UUID;
 @Repository
 public interface BranchRepository extends JpaRepository<Branch, UUID> {
 
-    @Query(value = "select *\n" +
+    @Query(value = "select b.name_uz   as nameUz,\n" +
+            "       b.name_ru   as nameRu,\n" +
+            "       b.latitude  as latitude,\n" +
+            "       b.longitude as longitude\n" +
             "from branch b\n" +
-            "where (upper(b.name_uz) ilike upper('%' || :search || '%') or upper(b.name_ru) ilike upper('%' || :search || '%')) and b.deleted is false",
-            countQuery = "select *\n" +
+            "where (upper(b.name_uz) ilike upper('%' || :search || '%') or upper(b.name_ru) ilike upper('%' || :search || '%'))\n" +
+            "  and b.deleted is false",
+            countQuery = "select b.name_uz   as nameUz,\n" +
+                    "       b.name_ru   as nameRu,\n" +
+                    "       b.latitude  as latitude,\n" +
+                    "       b.longitude as longitude\n" +
                     "from branch b\n" +
-                    "where (upper(b.name_uz) ilike upper('%' || :search || '%') or upper(b.name_ru) ilike upper('%' || :search || '%')) and b.deleted is false", nativeQuery = true)
+                    "where (upper(b.name_uz) ilike upper('%' || :search || '%') or upper(b.name_ru) ilike upper('%' || :search || '%'))\n" +
+                    "  and b.deleted is false", nativeQuery = true)
     Page<BranchProjection> getBranches(String search, Pageable pageable);
 
 
