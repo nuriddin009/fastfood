@@ -55,8 +55,8 @@ public class OrderController {
     }
 
     //    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
-    @GetMapping("/byRow")
-    public ResponseEntity<ApiResponse> getOrdersByRows(
+    @GetMapping("/byColumns")
+    public ResponseEntity<ApiResponse> getOrdersByColumns(
             @RequestParam(defaultValue = "PENDING") OrderStatus status,
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10", required = false) Integer size
@@ -66,8 +66,8 @@ public class OrderController {
 
 
     //    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
-    @GetMapping("/byColumns")
-    public ResponseEntity<ApiResponse> getOrdersByColumns(
+    @GetMapping("/byRow")
+    public ResponseEntity<ApiResponse> getOrdersByRows(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10", required = false) Integer size
     ) {
