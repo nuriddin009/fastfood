@@ -27,7 +27,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         StringBuilder sql = new StringBuilder();
         sql.append("select p from Product p where 1=1 ");
 
-        sql.append(" and t.deleted=false");
+        sql.append(" and p.deleted=false");
 
         if (filter.getFrom() != null) {
             sql.append(" and p.createdAt>=:from");
