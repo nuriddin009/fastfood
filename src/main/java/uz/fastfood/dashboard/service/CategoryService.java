@@ -43,13 +43,21 @@ public class CategoryService {
     }
 
     public Page<CategoryDTO> getAllProducts(CategoryFilter filter) {
-        return categoryRepository.findAllByFilter(filter).map(categoryMapper::getCategoryDTO);
+        Page<Category> allByFilter = categoryRepository.findAllByFilter(filter);
+
+
+      return   allByFilter.map(category -> {
+            category.setParent(categoryRepository.findById(category.getParentId()).orElse(null));
+            return category;
+        }).map(categoryMapper::getCategoryDTO);
+
+//        return categoryRepository.findAllByFilter(filter).map(categoryMapper::getCategoryDTO);
     }
 
     public ApiResponse delete(UUID id) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Category not found"));
         category.setDeleted(true);
         categoryRepository.save(category);
-        return new ApiResponse(true,"Category deleted");
+        return new ApiResponse(true, "Category deleted");
     }
 }

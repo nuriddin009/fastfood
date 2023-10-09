@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
     scheme = "Authorization"
 )
 @OpenAPIDefinition(
-    info = @Info(title = "Aloqa Business API"),
+    info = @Info(title = "Fast Food API"),
     security = @SecurityRequirement(name = "Authorization"),
     servers = {
         @Server(url = "http://localhost:8080", description = "Local Server"),

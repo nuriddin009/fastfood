@@ -12,4 +12,5 @@ public class CategoryDTO extends BaseAuditDTO {
     private String nameRu;
     private String nameUz;
     private List<CategoryCreateDTO> children = new ArrayList<>();
+
 }

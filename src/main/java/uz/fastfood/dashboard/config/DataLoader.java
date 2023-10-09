@@ -9,8 +9,10 @@ import uz.fastfood.dashboard.entity.*;
 import uz.fastfood.dashboard.entity.enums.OrderStatus;
 import uz.fastfood.dashboard.entity.enums.RoleName;
 import uz.fastfood.dashboard.repository.*;
+import uz.fastfood.dashboard.service.DistanceService;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,11 +30,15 @@ public class DataLoader implements CommandLineRunner {
     private final RoleRepository roleRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final DistanceService distanceService;
 
 
     @Transactional
     @Override
     public void run(String... args) {
+
+        distanceService.calculateDistance(41.3416675, 69.3364522, 41.3336437, 69.2693621);
+
 
         if (userRepository.count() == 0) {
 
@@ -130,6 +136,7 @@ public class DataLoader implements CommandLineRunner {
                     .nameRu("Ichimliklar ru")
                     .build());
 
+
             List<Category> drinksCategory = categoryRepository.saveAll(List.of(
                     Category.builder()
                             .parentId(drinks.getId())
@@ -142,6 +149,10 @@ public class DataLoader implements CommandLineRunner {
                             .nameRu("Salqin ichimliklar ru")
                             .build()
             ));
+
+
+            drinks.setChildCategories(new HashSet<>(drinksCategory));
+            categoryRepository.save(drinks);
 
             List<Attachment> attachments = attachmentRepository.saveAll(List.of(
                     new Attachment("https://www.pasta.uz/upload/products/OL%20x%20Pasta%20Tandir%20lavash.jpg"),

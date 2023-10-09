@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.fastfood.dashboard.dto.request.OrderAdminRequest;
 import uz.fastfood.dashboard.dto.request.OrderRequest;
 import uz.fastfood.dashboard.dto.response.ApiResponse;
 import uz.fastfood.dashboard.dto.response.BaseResponse;
@@ -35,7 +36,7 @@ public class OrderController {
 
     //    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     @PostMapping("by_admin")
-    public ResponseEntity<BaseResponse<?>> makeOrderByAdmin(@RequestBody @Valid OrderRequest request) {
+    public ResponseEntity<BaseResponse<?>> makeOrderByAdmin(@RequestBody @Valid OrderAdminRequest request) {
         BaseResponse<?> response = new BaseResponse<>();
         response = service.makeOrderByAdmin(request, response);
         HttpStatus status = response.getError() ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.ACCEPTED;

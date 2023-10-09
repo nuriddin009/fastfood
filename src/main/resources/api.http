@@ -1,2 +1,1 @@
-GET https://api.routing.yandex.net/v2/route?waypoints=55.734494627139355,37.68191922355621|55.733441295701056,37.59027350593535&apikey=6f787c3d-a0a8-4708-8e23-1a9ebc09ca1c
-
+GET https://graphhopper.com/maps/?point=41.341668%2C69.336452_Current+Location&point=41.341668%2C69.336452_Current+Location&point=48.8177%2C5.892_Minorville%2C+54385%2C+Grand+Est%2C+France&profile=car&layer=Omniscale

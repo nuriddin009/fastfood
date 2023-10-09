@@ -15,7 +15,7 @@ public class OrderNumberCreator {
     private final OrderRepository orderRepository;
 
     public int createOrderNumber(Branch branch) {
-       MaxOrderNumber maxOrderNumber = orderRepository.getMaxOrderNumber(branch.getId());
+        MaxOrderNumber maxOrderNumber = orderRepository.getMaxOrderNumber(branch.getId());
         if (maxOrderNumber.getOrderNumber() <= 500 || maxOrderNumber.getOrderSize() == 0) {
             return maxOrderNumber.getOrderNumber() + 1;
         }

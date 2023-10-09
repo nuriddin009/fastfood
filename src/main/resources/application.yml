@@ -40,7 +40,7 @@ springdoc:
   swagger-ui:
     path: /
 
-yandex:
+google:
   api:
-    key: 2ee2aa57-1c00-4fd9-a12b-0a5826722784
+    key: AIzaSyC59D7fgiAS0hZVg5JewmCfi69APSnjsbg
 

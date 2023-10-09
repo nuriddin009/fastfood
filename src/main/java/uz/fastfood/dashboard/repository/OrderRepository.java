@@ -25,6 +25,8 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     Page<OrderProjection> getOrdersByOrderStatus(String orderStatus, Pageable pageable);
 
 
+
+
     OrderDetails findByIdAndDeletedFalse(UUID id);
 
     @Query(value = "select b.name_uz   as nameUz,\n" +

@@ -42,7 +42,6 @@ public class SecurityConfiguration {
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/**",
-                        "/api/v1/auth/**",
                         "/favicon.ico",
                         "/**/*.png",
                         "/**/*.gif",

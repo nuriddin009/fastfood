@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import uz.fastfood.dashboard.dto.request.OrderAdminRequest;
 import uz.fastfood.dashboard.dto.request.OrderItemRequest;
 import uz.fastfood.dashboard.dto.request.OrderRequest;
 import uz.fastfood.dashboard.dto.response.ApiResponse;
@@ -16,10 +17,7 @@ import uz.fastfood.dashboard.entity.enums.OrderStatus;
 import uz.fastfood.dashboard.filter.OrderFilter;
 import uz.fastfood.dashboard.projection.OrderDetails;
 import uz.fastfood.dashboard.projection.OrderProjection;
-import uz.fastfood.dashboard.repository.BranchRepository;
-import uz.fastfood.dashboard.repository.OrderItemRepository;
-import uz.fastfood.dashboard.repository.OrderRepository;
-import uz.fastfood.dashboard.repository.ProductRepository;
+import uz.fastfood.dashboard.repository.*;
 import uz.fastfood.dashboard.service.DistanceService;
 import uz.fastfood.dashboard.service.OrderService;
 import uz.fastfood.dashboard.service.UserSession;
@@ -40,6 +38,7 @@ public class OrderServiceImpl implements OrderService {
     private final BranchRepository branchRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderNumberCreator orderNumberCreator;
+    private final UserRepository userRepository;
 
     @Override
     public BaseResponse<?> makeOrder(OrderRequest request, BaseResponse<?> response) {
@@ -73,9 +72,12 @@ public class OrderServiceImpl implements OrderService {
                     nearestBranch.getLatitude(), nearestBranch.getLongitude()
             ); */
 
+            User customer = userSession.getUser();
+            customer.setOrderVolume(customer.getOrderVolume() + 1);
+            userRepository.save(customer);
 
             Order order = orderRepository.save(Order.builder()
-                    .customer(userSession.getUser())
+                    .customer(customer)
                     .operator(null)
                     .orderCost(sum)
                     .orderNumber(orderNumberCreator.createOrderNumber(nearestBranch))
@@ -102,10 +104,63 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public BaseResponse<?> makeOrderByAdmin(OrderRequest request, BaseResponse<?> response) {
+    public BaseResponse<?> makeOrderByAdmin(OrderAdminRequest request, BaseResponse<?> response) {
+
+        try {
+            List<OrderItemRequest> orderItems = request.getOrderItems();
+
+            BigDecimal sum = BigDecimal.valueOf(0);
+
+            List<OrderItem> orderItemList = new ArrayList<>();
+
+            for (OrderItemRequest orderItem : orderItems) {
+                Product product = productRepository.findById(orderItem.getProductId()).orElseThrow(() -> new NoSuchElementException("Product not found"));
+
+                orderItemList.add(orderItemRepository.save(OrderItem.builder()
+                        .product(product)
+                        .quantity(orderItem.getQuantity())
+                        .build()));
 
 
-        return null;
+                BigDecimal productCount = BigDecimal.valueOf(orderItem.getQuantity());
+                BigDecimal totalPriceForItem = productCount.multiply(product.getPrice());
+                sum = sum.add(totalPriceForItem);
+            }
+
+            Branch nearestBranch = findNearestBranch(request.getLatitude(), request.getLongitude());
+
+            double distance = 5; /*distanceService.calculateDistance(
+                    request.getLatitude(), request.getLongitude(),
+                    nearestBranch.getLatitude(), nearestBranch.getLongitude()
+            ); */
+
+            User customer = userRepository.findById(request.getCustomerId()).orElseThrow(() -> new EntityNotFoundException("User not found with id =" + request.getCustomerId()));
+
+            Order order = orderRepository.save(Order.builder()
+                    .customer(customer)
+                    .operator(null)
+                    .orderCost(sum)
+                    .orderNumber(orderNumberCreator.createOrderNumber(nearestBranch))
+                    .shippingCost(calculateShippingCost(distance))
+                    .orderStatus(OrderStatus.PENDING)
+                    .latitude(request.getLatitude())
+                    .longitude(request.getLongitude())
+                    .branch(nearestBranch)
+                    .orderItems(orderItemList)
+                    .build());
+
+            orderItemList.forEach(orderItem -> orderItem.setOrder(order));
+            List<OrderItem> orderItemList1 = orderItemRepository.saveAll(orderItemList);
+            System.out.println(orderItemList1);
+
+
+            response.setMessage("Order created");
+        } catch (Exception e) {
+            response.setError(true);
+            response.setMessage(e.getMessage());
+            e.printStackTrace();
+        }
+        return response;
     }
 
     @Transactional
