@@ -16,7 +16,7 @@ public class ClientRequest {
     @NotBlank
     private String phoneNumber;
     @NotNull
-    private int orderCount;
+    private int orderVolume;
     @NotNull
     private Status status;
 

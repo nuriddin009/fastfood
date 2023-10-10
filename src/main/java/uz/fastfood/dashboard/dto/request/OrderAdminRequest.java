@@ -1,5 +1,6 @@
 package uz.fastfood.dashboard.dto.request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -20,5 +21,6 @@ public class OrderAdminRequest {
 
     @NotNull
     private UUID customerId;
-
+    @Min(value = 1, message = "order volume must be at last 1")
+    private Integer orderVolume;
 }

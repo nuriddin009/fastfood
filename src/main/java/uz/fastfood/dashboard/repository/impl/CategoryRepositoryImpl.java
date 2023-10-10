@@ -1,4 +1,4 @@
-package uz.fastfood.dashboard.repository;
+package uz.fastfood.dashboard.repository.impl;
 
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.EntityManager;
@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 import uz.fastfood.dashboard.entity.Category;
 import uz.fastfood.dashboard.filter.CategoryFilter;
+import uz.fastfood.dashboard.repository.CategoryRepositoryCustom;
 
 @Component
 public class CategoryRepositoryImpl implements CategoryRepositoryCustom {

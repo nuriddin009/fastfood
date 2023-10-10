@@ -1,12 +1,14 @@
 package uz.fastfood.dashboard.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.fastfood.dashboard.dto.response.ApiResponse;
 import uz.fastfood.dashboard.entity.User;
 import uz.fastfood.dashboard.entity.enums.Status;
+import uz.fastfood.dashboard.filter.UserFilter;
 import uz.fastfood.dashboard.service.UserService;
 
 import java.util.UUID;
@@ -20,12 +22,9 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @GetMapping
     public ResponseEntity<ApiResponse> findAll(
-            @RequestParam(defaultValue = "") String search,
-            @RequestParam(defaultValue = "asc", required = false) String nameSort,
-            @RequestParam(defaultValue = "asc", required = false) String orderSort,
-            @RequestParam(defaultValue = "", required = false) Boolean activeSort
+            @ParameterObject UserFilter filter
     ) {
-        return ResponseEntity.ok(new ApiResponse());
+        return ResponseEntity.ok(service.getCustomers(filter));
     }
 
 
@@ -41,17 +40,13 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
     @PatchMapping("change_role")
-    public ResponseEntity<?> changeUserRole(){
+    public ResponseEntity<?> changeUserRole() {
 
         service.changeUserRole();
 
 
-
-
         return ResponseEntity.ok(new User());
     }
-
-
 
 
 }

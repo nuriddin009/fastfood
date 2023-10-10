@@ -1,4 +1,4 @@
-package uz.fastfood.dashboard.service.impl;
+package uz.fastfood.dashboard.repository.impl;
 
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.EntityManager;

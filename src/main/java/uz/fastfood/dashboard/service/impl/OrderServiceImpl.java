@@ -135,6 +135,8 @@ public class OrderServiceImpl implements OrderService {
             ); */
 
             User customer = userRepository.findById(request.getCustomerId()).orElseThrow(() -> new EntityNotFoundException("User not found with id =" + request.getCustomerId()));
+            customer.setOrderVolume(request.getOrderVolume());
+            userRepository.save(customer);
 
             Order order = orderRepository.save(Order.builder()
                     .customer(customer)

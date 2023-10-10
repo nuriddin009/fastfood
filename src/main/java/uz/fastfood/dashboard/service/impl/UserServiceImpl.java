@@ -12,6 +12,8 @@ import uz.fastfood.dashboard.dto.response.ApiResponse;
 import uz.fastfood.dashboard.entity.User;
 import uz.fastfood.dashboard.entity.enums.OrderStatus;
 import uz.fastfood.dashboard.entity.enums.Status;
+import uz.fastfood.dashboard.filter.UserFilter;
+import uz.fastfood.dashboard.mapper.UserMapper;
 import uz.fastfood.dashboard.repository.UserRepository;
 import uz.fastfood.dashboard.service.UserService;
 import uz.fastfood.dashboard.service.UserSession;
@@ -24,33 +26,32 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private EntityManager entityManager;
-    private UserSession userSession;
+    private final UserSession userSession;
+    private final UserMapper userMapper;
 
 
     @Override
     public User registerClient(ClientRequest request) {
         User user = null;
         if (!userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
-            user = User.builder()
+            user = userRepository.save(User.builder()
                     .phoneNumber(request.getPhoneNumber())
                     .firstname(request.getFirstname())
-                    .lastname(request.getLastname()).build();
-
-            userRepository.save(user);
+                    .lastname(request.getLastname())
+                    .orderVolume(request.getOrderVolume())
+                    .build());
         } else {
-            throw new EntityExistsException();
+            throw new EntityExistsException("Phone number already exist");
         }
 
         return user;
     }
 
     @Override
-    public ApiResponse getCustomers(String search, Integer page, Integer size, String nameSort, String orderSort, Boolean activeSort) {
-
-
-        return null;
+    public ApiResponse getCustomers(UserFilter filter) {
+        return new ApiResponse(true, userRepository.findAllByFilter(filter).map(userMapper::toDto));
     }
+
 
     @Override
     public ApiResponse changeUserStatus(UUID userId, Status status) {
