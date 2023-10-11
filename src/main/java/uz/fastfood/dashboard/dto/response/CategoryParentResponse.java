@@ -7,10 +7,10 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-public class CategoryResponse {
+public class CategoryParentResponse {
 
     private UUID id;
     private String nameUz;
     private String nameRu;
-    private CategoryParentResponse parent;
+
 }

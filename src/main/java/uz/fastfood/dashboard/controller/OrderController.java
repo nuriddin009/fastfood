@@ -34,7 +34,7 @@ public class OrderController {
         return new ResponseEntity<>(response, status);
     }
 
-    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
+    //        @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     @PostMapping("by_admin")
     public ResponseEntity<BaseResponse<?>> makeOrderByAdmin(@RequestBody @Valid OrderAdminRequest request) {
         BaseResponse<?> response = new BaseResponse<>();
@@ -55,7 +55,7 @@ public class OrderController {
         return new ResponseEntity<>(response, status);
     }
 
-    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @GetMapping("/byColumns")
     public ResponseEntity<ApiResponse> getOrdersByColumns(
             @RequestParam(defaultValue = "PENDING") OrderStatus status,
@@ -66,7 +66,7 @@ public class OrderController {
     }
 
 
-    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @GetMapping("/byRow")
     public ResponseEntity<ApiResponse> getOrdersByRows(
             @RequestParam(defaultValue = "1") Integer page,

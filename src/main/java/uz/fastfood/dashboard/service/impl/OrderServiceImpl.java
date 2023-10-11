@@ -177,7 +177,6 @@ public class OrderServiceImpl implements OrderService {
         } catch (Exception e) {
             response.setError(true);
             response.setMessage(e.getMessage());
-            e.printStackTrace();
         }
         return response;
     }
@@ -194,7 +193,8 @@ public class OrderServiceImpl implements OrderService {
 
         Pageable pageable = PageRequest.of(page - 1, size);
         for (OrderStatus value : OrderStatus.values()) {
-            listMap.put(value.name().toLowerCase(), orderRepository.getOrdersByOrderStatus(value.name(), pageable).getContent());
+            if (!value.equals(OrderStatus.CANCELED))
+                listMap.put(value.name().toLowerCase(), orderRepository.getOrdersByOrderStatus(value.name(), pageable).getContent());
         }
 
         return new ApiResponse(true, listMap, "Orders by columns");

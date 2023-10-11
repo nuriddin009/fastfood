@@ -12,7 +12,6 @@ import uz.fastfood.dashboard.entity.enums.RoleName;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
-
   private String firstname;
   private String lastname;
   private String username;

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import uz.fastfood.dashboard.entity.*;
 import uz.fastfood.dashboard.entity.enums.OrderStatus;
 import uz.fastfood.dashboard.entity.enums.RoleName;
+import uz.fastfood.dashboard.entity.enums.Status;
 import uz.fastfood.dashboard.repository.*;
 import uz.fastfood.dashboard.service.DistanceService;
 
@@ -53,7 +54,8 @@ public class DataLoader implements CommandLineRunner {
                     .password(passwordEncoder.encode("password"))
                     .firstname("Adminjon")
                     .lastname("Adminjonov")
-                    .roles(Set.of(role_user, role_admin, role_super_admin))
+                    .status(Status.ACTIVE)
+                    .roles(Set.of(role_user, role_admin, role_super_admin, role_currier))
                     .build());
 
 
@@ -63,6 +65,7 @@ public class DataLoader implements CommandLineRunner {
                     .password(passwordEncoder.encode("root123"))
                     .username("operator1")
                     .phoneNumber("+998941234567")
+                    .status(Status.ACTIVE)
                     .roles(Set.of(role_user, role_operator))
                     .build());
             User operator2 = userRepository.save(User.builder()
@@ -71,6 +74,7 @@ public class DataLoader implements CommandLineRunner {
                     .password(passwordEncoder.encode("root123"))
                     .username("operator2")
                     .phoneNumber("+998911234567")
+                    .status(Status.ACTIVE)
                     .roles(Set.of(role_user, role_operator))
                     .build());
 
@@ -81,6 +85,7 @@ public class DataLoader implements CommandLineRunner {
                     .password(passwordEncoder.encode("root123"))
                     .username("customer")
                     .phoneNumber("+998971234567")
+                    .status(Status.ACTIVE)
                     .roles(Set.of(role_user))
                     .build());
 

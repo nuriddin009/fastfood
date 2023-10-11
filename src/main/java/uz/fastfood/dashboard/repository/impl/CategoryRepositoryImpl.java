@@ -60,6 +60,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
         }
 
 
+
         return new PageImpl<>(query.getResultList(), filter.getPageable(), countQuery.getSingleResult());
     }
 }

@@ -1,7 +1,9 @@
 package uz.fastfood.dashboard.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -22,8 +24,9 @@ public class DistanceService {
             String origin = originLat + "," + originLng;
             String destination = destLat + "," + destLng; // Replace with your destination
 
+
             String url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
-                    + origin + "&destinations=" + destination + "&key=" + apiKey;
+                    + origin + "&destinations=" +destination  + "&key=" + apiKey;
 
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -38,7 +41,7 @@ public class DistanceService {
             }
             in.close();
 
-            System.out.println("Matrix response : " + response.toString());
+            System.out.println("Matrix response : " + response);
         } catch (Exception e) {
             e.printStackTrace();
         }

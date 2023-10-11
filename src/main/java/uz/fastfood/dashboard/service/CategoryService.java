@@ -43,15 +43,7 @@ public class CategoryService {
     }
 
     public Page<CategoryDTO> getAllProducts(CategoryFilter filter) {
-        Page<Category> allByFilter = categoryRepository.findAllByFilter(filter);
-
-
-      return   allByFilter.map(category -> {
-            category.setParent(categoryRepository.findById(category.getParentId()).orElse(null));
-            return category;
-        }).map(categoryMapper::getCategoryDTO);
-
-//        return categoryRepository.findAllByFilter(filter).map(categoryMapper::getCategoryDTO);
+        return categoryRepository.findAllByFilter(filter).map(categoryMapper::getCategoryDTO);
     }
 
     public ApiResponse delete(UUID id) {
