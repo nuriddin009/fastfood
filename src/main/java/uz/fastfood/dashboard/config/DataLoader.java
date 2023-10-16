@@ -38,7 +38,7 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        distanceService.calculateDistance(41.3416675, 69.3364522, 41.3336437, 69.2693621);
+//        distanceService.calculateDistance(41.3416675, 69.3364522, 41.3336437, 69.2693621);
 
 
         if (userRepository.count() == 0) {

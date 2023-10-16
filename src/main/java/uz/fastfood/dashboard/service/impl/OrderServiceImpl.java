@@ -67,10 +67,11 @@ public class OrderServiceImpl implements OrderService {
 
             Branch nearestBranch = findNearestBranch(request.getLatitude(), request.getLongitude());
 
-            double distance = 5; /*distanceService.calculateDistance(
+
+            double distance = distanceService.calculateDistance(
                     request.getLatitude(), request.getLongitude(),
                     nearestBranch.getLatitude(), nearestBranch.getLongitude()
-            ); */
+            );
 
             User customer = userSession.getUser();
             customer.setOrderVolume(customer.getOrderVolume() + 1);
@@ -88,6 +89,7 @@ public class OrderServiceImpl implements OrderService {
                     .branch(nearestBranch)
                     .orderItems(orderItemList)
                     .build());
+
 
             orderItemList.forEach(orderItem -> orderItem.setOrder(order));
             List<OrderItem> orderItemList1 = orderItemRepository.saveAll(orderItemList);
@@ -129,10 +131,10 @@ public class OrderServiceImpl implements OrderService {
 
             Branch nearestBranch = findNearestBranch(request.getLatitude(), request.getLongitude());
 
-            double distance = 5; /*distanceService.calculateDistance(
+            double distance = distanceService.calculateDistance(
                     request.getLatitude(), request.getLongitude(),
                     nearestBranch.getLatitude(), nearestBranch.getLongitude()
-            ); */
+            );
 
             User customer = userRepository.findById(request.getCustomerId()).orElseThrow(() -> new EntityNotFoundException("User not found with id =" + request.getCustomerId()));
             customer.setOrderVolume(request.getOrderVolume());
@@ -160,7 +162,6 @@ public class OrderServiceImpl implements OrderService {
         } catch (Exception e) {
             response.setError(true);
             response.setMessage(e.getMessage());
-            e.printStackTrace();
         }
         return response;
     }
@@ -190,13 +191,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ApiResponse getOrdersV2(Integer page, Integer size) {
         Map<String, List<OrderProjection>> listMap = new HashMap<>();
-
         Pageable pageable = PageRequest.of(page - 1, size);
         for (OrderStatus value : OrderStatus.values()) {
             if (!value.equals(OrderStatus.CANCELED))
                 listMap.put(value.name().toLowerCase(), orderRepository.getOrdersByOrderStatus(value.name(), pageable).getContent());
         }
-
         return new ApiResponse(true, listMap, "Orders by columns");
     }
 

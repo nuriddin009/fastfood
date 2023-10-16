@@ -21,10 +21,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
     public Page<Category> findAllByFilter(CategoryFilter filter) {
 
         final boolean hasSearch = StringUtils.isNotEmpty(filter.getSearch());
-        StringBuilder sql = new StringBuilder("select t from Category t where true ");
-
-
-        sql.append(" and t.deleted=false");
+        StringBuilder sql = new StringBuilder("select t from Category t where t.deleted=false ");
 
         if (filter.getFrom() != null) {
             sql.append(" and t.createdAt>=:from");
