@@ -5,15 +5,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.fastfood.dashboard.dto.request.BranchDto;
 import uz.fastfood.dashboard.dto.response.ApiResponse;
 import uz.fastfood.dashboard.dto.response.BaseResponse;
 import uz.fastfood.dashboard.entity.Branch;
 import uz.fastfood.dashboard.service.BranchService;
-import uz.fastfood.dashboard.service.DistanceService;
 
-import java.util.TreeMap;
 import java.util.UUID;
 
 @RestController
@@ -22,10 +21,9 @@ import java.util.UUID;
 public class BranchController {
 
     private final BranchService branchService;
-    private final DistanceService distanceService;
 
 
-    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @GetMapping
     public ResponseEntity<ApiResponse> getBranches(
             @RequestParam(defaultValue = "") String search,
@@ -61,10 +59,4 @@ public class BranchController {
     ) {
         return ResponseEntity.ok(branchService.updateBranch(request));
     }
-
-    @GetMapping(value = "/coordination")
-    public ResponseEntity<TreeMap<UUID, Double>> coordination(double clientLongitude, double clientLatitude) {
-        return ResponseEntity.ok(distanceService.coordination(clientLongitude, clientLatitude));
-    }
-
 }
