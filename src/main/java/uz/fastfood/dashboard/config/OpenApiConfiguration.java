@@ -21,8 +21,7 @@ import org.springframework.context.annotation.Configuration;
     info = @Info(title = "Fast Food API"),
     security = @SecurityRequirement(name = "Authorization"),
     servers = {
-        @Server(url = "http://localhost:8080", description = "Local Server"),
-        @Server(url = "https://dev-alb-business.aloqabank.uz", description = "Dev Server")
+        @Server(url = "http://localhost:8080", description = "Local Server")
     }
 )
 public class OpenApiConfiguration {

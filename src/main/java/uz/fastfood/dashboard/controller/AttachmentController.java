@@ -16,7 +16,7 @@ public class AttachmentController {
 
     private final FileUploadService fileUploadService;
 
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestBody MultipartFile file) {
         FileUpload fileUpload = fileUploadService.fileUpload(file, true);

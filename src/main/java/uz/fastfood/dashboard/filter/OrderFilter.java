@@ -17,8 +17,6 @@ import java.time.LocalTime;
 public class OrderFilter extends PageFilter {
 
 
-
-
     @ApiModelProperty("С")
     @ToString.Include
     private LocalDateTime from;
@@ -26,6 +24,7 @@ public class OrderFilter extends PageFilter {
     @ApiModelProperty("По")
     @ToString.Include
     private LocalDateTime to;
+
 
     @ApiModelProperty("Status")
     @ToString.Include

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.fastfood.dashboard.dto.ProductCreateDTO;
 import uz.fastfood.dashboard.dto.ProductDTO;

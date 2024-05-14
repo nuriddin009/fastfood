@@ -32,8 +32,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerClient(ClientRequest request) {
-        User user = null;
-        if (!userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+        User user;
+        if ( !userRepository.existsByPhoneNumber(request.getPhoneNumber()) ) {
             user = userRepository.save(User.builder()
                     .phoneNumber(request.getPhoneNumber())
                     .firstname(request.getFirstname())

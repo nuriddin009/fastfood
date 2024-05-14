@@ -22,5 +22,6 @@ public abstract class BaseEntity extends UserAudit {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean deleted = false;
 }

@@ -71,14 +71,14 @@ public class OrderServiceImpl implements OrderService {
             double distance = distanceService.calculateDistance(
                     request.getLatitude(), request.getLongitude(),
                     nearestBranch.getLatitude(), nearestBranch.getLongitude()
-            );
+            )/1000;
 
-            User customer = userSession.getUser();
-            customer.setOrderVolume(customer.getOrderVolume() + 1);
-            userRepository.save(customer);
+//            User customer = userSession.getUser();
+//            customer.setOrderVolume(customer.getOrderVolume() + 1);
+//            userRepository.save(customer);
 
             Order order = orderRepository.save(Order.builder()
-                    .customer(customer)
+                    .customer(null)
                     .operator(null)
                     .orderCost(sum)
                     .orderNumber(orderNumberCreator.createOrderNumber(nearestBranch))
@@ -100,7 +100,6 @@ public class OrderServiceImpl implements OrderService {
         } catch (Exception e) {
             response.setError(true);
             response.setMessage(e.getMessage());
-            e.printStackTrace();
         }
         return response;
     }
@@ -134,9 +133,10 @@ public class OrderServiceImpl implements OrderService {
             double distance = distanceService.calculateDistance(
                     request.getLatitude(), request.getLongitude(),
                     nearestBranch.getLatitude(), nearestBranch.getLongitude()
-            );
+            )/1000;
 
-            User customer = userRepository.findById(request.getCustomerId()).orElseThrow(() -> new EntityNotFoundException("User not found with id =" + request.getCustomerId()));
+            User customer = userRepository.findById(request.getCustomerId())
+                    .orElseThrow(() -> new EntityNotFoundException("User not found with id =" + request.getCustomerId()));
             customer.setOrderVolume(request.getOrderVolume());
             userRepository.save(customer);
 
@@ -233,11 +233,11 @@ public class OrderServiceImpl implements OrderService {
         // Haversine formula
         double dLat = radiansLat2 - radiansLat1;
         double dLon = radiansLon2 - radiansLon1;
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(radiansLat1) * Math.cos(radiansLat2) *
-                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return 6371 * c;
+        double a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+                Math.cos(radiansLat1)*Math.cos(radiansLat2)*
+                        Math.sin(dLon/2)*Math.sin(dLon/2);
+        double c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return 6371*c;
     }
 
     private Branch findNearestBranch(double myLat, double myLon) {
@@ -273,7 +273,7 @@ public class OrderServiceImpl implements OrderService {
             }
         }
 
-        return BigDecimal.valueOf(baseFee + (distance * ratePerKilometer));
+        return BigDecimal.valueOf(baseFee + (distance*ratePerKilometer));
     }
 
 }

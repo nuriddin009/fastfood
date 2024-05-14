@@ -16,8 +16,6 @@ public interface OrderService {
     ApiResponse getOrders(OrderStatus orderStatus, Integer page, Integer size);
     ApiResponse getOrdersV2(Integer page, Integer size);
     ApiResponse attachOperator(UUID orderId);
-
     ApiResponse deleteOrder(UUID orderId);
-
     ApiResponse orderDetail(UUID orderId);
 }

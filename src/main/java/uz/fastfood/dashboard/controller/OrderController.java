@@ -25,7 +25,8 @@ public class OrderController {
     private final OrderService service;
 
 
-    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_CURRIER', 'ROLE_OPERATOR','ROLE_SUPER_ADMIN')")
+
+//    @PreAuthorize("isAuthenticated()")
     @PostMapping
     public ResponseEntity<BaseResponse<?>> makeOrder(@RequestBody @Valid OrderRequest request) {
         BaseResponse<?> response = new BaseResponse<>();

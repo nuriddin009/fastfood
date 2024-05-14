@@ -38,9 +38,6 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-//        distanceService.calculateDistance(41.3416675, 69.3364522, 41.3336437, 69.2693621);
-
-
         if (userRepository.count() == 0) {
 
             Role role_user = roleRepository.save(Role.builder().name(RoleName.ROLE_USER).build());
@@ -250,12 +247,12 @@ public class DataLoader implements CommandLineRunner {
 
 
                 Order order1 = orderRepository.save(Order.builder()
-                        .operator(userRepository.findByUsername("operator1").get())
+                        .operator(userRepository.findByUsername("operator1").orElseThrow())
                         .branch(branches.get(0))
                         .customer(customer)
                         .orderCost(BigDecimal.valueOf(200000))
                         .orderNumber(1)
-                        .shippingCost(BigDecimal.valueOf(1000))
+                        .shippingCost(BigDecimal.valueOf(5000))
                         .orderStatus(OrderStatus.PENDING)
                         .latitude(38.8976804)
                         .longitude(-77.0391101)
@@ -263,22 +260,22 @@ public class DataLoader implements CommandLineRunner {
                         .build());
 
                 Order order2 = orderRepository.save(Order.builder()
-                        .operator(userRepository.findByUsername("operator2").get())
+                        .operator(userRepository.findByUsername("operator2").orElseThrow())
                         .branch(branches.get(0))
                         .customer(customer)
                         .orderCost(BigDecimal.valueOf(156000))
-                        .shippingCost(BigDecimal.valueOf(6000))
+                        .shippingCost(BigDecimal.valueOf(7000))
                         .orderNumber(1)
                         .orderStatus(OrderStatus.PENDING)
                         .latitude(23.8776804)
                         .longitude(-55.0391101)
-                        .orderItems(orderItemList1)
+                        .orderItems(orderItemList2)
                         .build());
 
-                orderItemList1.forEach(orderItem -> orderItem.setOrder(order1));
-                orderItemRepository.saveAll(orderItemList1);
-                orderItemList2.forEach(orderItem -> orderItem.setOrder(order2));
-                orderItemRepository.saveAll(orderItemList2);
+//                orderItemList1.forEach(orderItem -> orderItem.setOrder(order1));
+//                orderItemRepository.saveAll(orderItemList1);
+//                orderItemList2.forEach(orderItem -> orderItem.setOrder(order2));
+//                orderItemRepository.saveAll(orderItemList2);
 
             }
 
